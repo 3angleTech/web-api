@@ -17,7 +17,7 @@ import { bindDependencies as bindSecurityDependencies } from './modules/security
 const appContainer = new Container();
 
 /**
- * Bind dependencies application wide dependencies.
+ * Bind application wide dependencies.
  */
 bindConfigurationDependencies(appContainer);
 bindDataStoreDependencies(appContainer);
