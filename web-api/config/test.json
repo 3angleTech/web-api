@@ -1,3 +1,5 @@
 {
-
+  "db-connection": {
+    "database": "threeangle_test"
+  }
 }

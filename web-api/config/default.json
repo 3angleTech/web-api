@@ -1,4 +1,12 @@
 {
+  "db-connection": {
+    "username": "threeangle",
+    "password": null,
+    "database": "threeangle",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  },
   "oauth": {
     "issuer": "3angleTech",
     "algorithm": "HS256",
