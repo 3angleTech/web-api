@@ -11,6 +11,7 @@ import { bindDependencies as bindConfigurationDependencies } from './common/conf
 import { bindDependencies as bindDataStoreDependencies } from './common/data-store';
 import { bindDependencies as bindJsonConvertedDependencies } from './common/json-converter';
 
+import { bindDependencies as bindHealthCheckDependencies } from './modules/health-check';
 import { bindDependencies as bindSecurityDependencies } from './modules/security';
 
 const appContainer = new Container();
@@ -21,6 +22,7 @@ const appContainer = new Container();
 bindConfigurationDependencies(appContainer);
 bindDataStoreDependencies(appContainer);
 bindJsonConvertedDependencies(appContainer);
+bindHealthCheckDependencies(appContainer);
 bindSecurityDependencies(appContainer);
 
 export { appContainer };

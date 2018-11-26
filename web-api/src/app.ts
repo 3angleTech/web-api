@@ -15,12 +15,14 @@ import { appContainer } from './app.inversify.config';
 import { ISqlContext } from './common/data-store';
 import { errorMiddleware } from './common/error';
 import { AppContext, AppRequest, AppResponse } from './core';
+import { IHealthCheckController } from './modules/health-check';
 import { authenticated, IAuthController } from './modules/security';
 
 class App {
   public express: Express;
 
   private authController: IAuthController;
+  private healthCheckController: IHealthCheckController;
 
   constructor() {
     this.express = express();
@@ -45,6 +47,7 @@ class App {
   }
 
   private initControllers(): void {
+    this.healthCheckController = appContainer.get<IHealthCheckController>(IHealthCheckController);
     this.authController = appContainer.get<IAuthController>(IAuthController);
   }
 
@@ -69,6 +72,9 @@ class App {
 
   private registerRoutes(): void {
     const router = express.Router();
+
+    router.route('/health-check')
+      .get(this.healthCheckController.run);
 
     router.route('/auth/token')
       .post(this.authController.token);
