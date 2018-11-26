@@ -10,6 +10,7 @@
     "sequelize": "sequelize",
     "prepare-db": "npm run sequelize db:migrate && npm run sequelize db:seed:all",
     "build": "rimraf ./dist && tslint --project tsconfig.json './src/**/*.ts' && tsc",
+    "test": "npm run build && NODE_ENV=test npm run prepare-db && NODE_ENV=test nyc mocha dist/**/*.spec.js dist/modules/**/*.spec.js --exit",
     "start": "npm run prepare-db && node dist/index.js"
   },
   "repository": {
