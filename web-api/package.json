@@ -4,6 +4,7 @@
   "description": "Open Source NodeJS Project w/ TypeScript",
   "main": "index.js",
   "scripts": {
+    "build": "rimraf ./dist && tslint --project tsconfig.json './src/**/*.ts' && tsc",
     "start": "node dist/index.js"
   },
   "repository": {
@@ -51,6 +52,7 @@
     "istanbul": "0.4.5",
     "mocha": "5.2.0",
     "nyc": "13.1.0",
+    "rimraf": "^2.6.2",
     "sequelize-cli": "5.3.0",
     "tslint": "5.11.0",
     "typescript": "3.1.6"

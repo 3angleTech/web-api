@@ -1,0 +1,12 @@
+version: '2'
+services:
+  3at-postgres:
+    container_name: 3at-postgres
+    build: ./docker/postgres
+    ports:
+      - "5432:5432"
+  3at-api:
+    container_name: 3at-api
+    build: ./web-api
+    ports:
+      - "3000:3000"
