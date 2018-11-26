@@ -1,0 +1,20 @@
+{
+  "oauth": {
+    "issuer": "3angleTech",
+    "algorithm": "HS256",
+    "accessTokenSecret": "bsdhajg6uU%#@^UT#HJAgdsjhdgfa",
+    "refreshTokenSecret": "_sdta%23gfhzHJDFAGfvgz!@rFgt65^4",
+    "clients": [
+      {
+        "id": "3at-api",
+        "secret": "b6b6d15c650f4849119eb894939d9fdaaf5f7d0e7e0f65de15b71bfa6411078c",
+        "grants": [
+          "password",
+          "refresh_token"
+        ],
+        "accessTokenExpirySeconds": 900,
+        "refreshTokenExpirySeconds": 172800
+      }
+    ]
+  }
+}

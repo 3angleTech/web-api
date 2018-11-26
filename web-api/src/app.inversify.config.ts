@@ -7,10 +7,13 @@
 import { Container } from 'inversify';
 import 'reflect-metadata';
 
+import { bindDependencies as bindConfigurationDependencies } from './common/configuration';
+
 const appContainer = new Container();
 
 /**
  * Bind dependencies application wide dependencies.
  */
+bindConfigurationDependencies(appContainer);
 
 export { appContainer };
