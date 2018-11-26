@@ -7,7 +7,7 @@
 import * as config from 'config';
 import { injectable } from 'inversify';
 
-import { IConfigurationService, OAuthConfiguration } from './configuration.interface';
+import { IConfigurationService, OAuthConfiguration } from './configuration.service.interface';
 
 @injectable()
 export class ConfigurationService implements IConfigurationService {

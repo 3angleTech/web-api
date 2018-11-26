@@ -1,0 +1,24 @@
+/**
+ * @license
+ * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Available under MIT license webFrame/LICENSE
+ */
+
+import { injectable } from 'inversify';
+import { JsonConvert, ValueCheckingMode } from 'json2typescript';
+import { IJsonConverterService } from './json-converter.service.interface';
+
+@injectable()
+export class JsonConverterService implements IJsonConverterService {
+
+  public deserialize<T>(json: any, classReference: new () => T): T {
+    return this.jsonConvert.deserialize(json, classReference);
+  }
+
+  private get jsonConvert(): JsonConvert {
+    const jsonConverter = new JsonConvert();
+    jsonConverter.valueCheckingMode = ValueCheckingMode.ALLOW_NULL;
+    return jsonConverter;
+
+  }
+}

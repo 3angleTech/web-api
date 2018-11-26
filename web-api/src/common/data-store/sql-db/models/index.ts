@@ -11,9 +11,8 @@ const fs = require('fs');
 const path = require('path');
 const basename = path.basename(__filename);
 import * as Sequelize from 'sequelize';
-import { dbConfiguration } from '../config';
-
-const sequelize = new Sequelize(dbConfiguration.database, dbConfiguration.username, dbConfiguration.password, dbConfiguration);
+const dbConfig = require(__dirname + '/../config.js');
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
 const db: any = {};
 
 fs

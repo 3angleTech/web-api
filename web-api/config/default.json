@@ -15,7 +15,7 @@
     "clients": [
       {
         "id": "3at-api",
-        "secret": "b6b6d15c650f4849119eb894939d9fdaaf5f7d0e7e0f65de15b71bfa6411078c",
+        "secret": "5r5rd15c650f4849119eb894939d9fdaaf5f7d0e7e0f65de15b71bfa6411011y",
         "grants": [
           "password",
           "refresh_token"

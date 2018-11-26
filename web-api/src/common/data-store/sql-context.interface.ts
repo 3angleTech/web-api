@@ -10,7 +10,7 @@ import { Model as SequelizeModel } from 'sequelize';
  * Available SQL Models (tables).
  */
 export enum SqlModel {
-  Users,
+  Users = 'Users',
 }
 
 export interface ISqlContext {

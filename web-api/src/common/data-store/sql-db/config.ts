@@ -16,7 +16,8 @@ interface DatabaseConfiguration {
 }
 
 const dbConnection = config.get<DatabaseConfiguration>('db-connection');
-export const dbConfiguration = {
+
+module.exports = {
   username: dbConnection.username,
   password: dbConnection.password,
   database: dbConnection.database,
@@ -30,5 +31,3 @@ export const dbConfiguration = {
   operatorsAliases: false,
   logging: console.log,
 };
-
-module.exports = dbConfiguration;

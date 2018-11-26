@@ -5,10 +5,12 @@
  */
 const models = require('./sql-db/models');
 
+import { injectable } from 'inversify';
 import { Model } from 'sequelize';
 import { Logger, LogLevel } from '../logger';
 import { ISqlContext, SqlModel } from './sql-context.interface';
 
+@injectable()
 export class SqlContext implements ISqlContext {
   constructor() {
     this.initialize();

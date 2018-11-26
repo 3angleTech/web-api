@@ -5,11 +5,11 @@
  */
 
 import { Container } from 'inversify';
-import { ConfigurationService } from './configuration';
-import { IConfigurationService } from './configuration.interface';
+import { ConfigurationService } from './configuration.service';
+import { IConfigurationService } from './configuration.service.interface';
 
 export function bindDependencies(container: Container): void {
   container.bind<IConfigurationService>(IConfigurationService).to(ConfigurationService);
 }
 
-export * from './configuration.interface';
+export * from './configuration.service.interface';
