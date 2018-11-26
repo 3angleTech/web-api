@@ -1,10 +1,9 @@
 /**
  * @license
  * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
- * Available under MIT license webFrame/LICENSE
+ * Available under MIT license webApi/LICENSE
  */
 
-// tslint:disable:no-identical-functions no-duplicate-string
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 chai.use(chaiHttp);
