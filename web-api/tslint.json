@@ -1,0 +1,9 @@
+{
+  "extends": "@3angletech/tslint/ts",
+  "rules": {
+    "file-header": [
+      true,
+      "Copyright .* 2018 THREEANGLE SOFTWARE SOLUTIONS SRL"
+    ]
+  }
+}
