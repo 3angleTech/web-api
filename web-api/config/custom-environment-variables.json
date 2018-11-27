@@ -1,0 +1,9 @@
+{
+  "db-connection": {
+    "username": "DB_USER",
+    "password": "DB_PASSWORD",
+    "database": "DB_SCHEMA",
+    "host": "DB_HOST",
+    "port": "DB_PORT"
+  }
+}
