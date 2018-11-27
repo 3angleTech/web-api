@@ -9,7 +9,7 @@ import 'reflect-metadata';
 
 import { bindDependencies as bindConfigurationDependencies } from './common/configuration';
 import { bindDependencies as bindJsonConvertedDependencies } from './common/json-converter';
-import { bindDependencies as bindDataStoreDependencies } from './data';
+import { bindDependencies as bindDataDependencies } from './data';
 
 import { bindDependencies as bindHealthCheckDependencies } from './modules/health-check';
 import { bindDependencies as bindSecurityDependencies } from './modules/security';
@@ -20,7 +20,7 @@ const appContainer = new Container();
  * Bind application wide dependencies.
  */
 bindConfigurationDependencies(appContainer);
-bindDataStoreDependencies(appContainer);
+bindDataDependencies(appContainer);
 bindJsonConvertedDependencies(appContainer);
 bindHealthCheckDependencies(appContainer);
 bindSecurityDependencies(appContainer);
