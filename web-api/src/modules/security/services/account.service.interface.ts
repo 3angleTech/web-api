@@ -4,7 +4,7 @@
  * Available under MIT license webApi/LICENSE
  */
 
-import { User } from '../../../common/data-store';
+import { User } from '../../../data';
 
 export interface Credentials {
   username: string;

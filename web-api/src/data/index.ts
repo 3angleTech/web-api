@@ -5,12 +5,12 @@
  */
 
 import { Container } from 'inversify';
-import { SqlContext } from './sql-context';
-import { ISqlContext } from './sql-context.interface';
+import { DatabaseContext } from './database-context';
+import { IDatabaseContext } from './database-context.interface';
 
 export function bindDependencies(container: Container): void {
-  container.bind<ISqlContext>(ISqlContext).to(SqlContext).inSingletonScope();
+  container.bind<IDatabaseContext>(IDatabaseContext).to(DatabaseContext).inSingletonScope();
 }
 
 export * from './data-objects/user.do';
-export * from './sql-context.interface';
+export * from './database-context.interface';

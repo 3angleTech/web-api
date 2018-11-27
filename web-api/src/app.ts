@@ -12,9 +12,9 @@ import * as cookieParser from 'cookie-parser';
 // tslint:disable-next-line:no-duplicate-imports
 import { Express, NextFunction, Request, Response } from 'express';
 import { appContainer } from './app.inversify.config';
-import { ISqlContext } from './common/data-store';
 import { errorMiddleware } from './common/error';
 import { AppContext, AppRequest, AppResponse } from './core';
+import { IDatabaseContext } from './data';
 import { IHealthCheckController } from './modules/health-check';
 import { authenticated, IAuthController } from './modules/security';
 
@@ -35,10 +35,10 @@ class App {
 
   private initialize(): void {
     /**
-     * ISqlContext is a singleton scoped service
+     * IDatabaseContext is a singleton scoped service
      * We force its instantiation to make sure the database connection is initialized.
      */
-    appContainer.get<ISqlContext>(ISqlContext);
+    appContainer.get<IDatabaseContext>(IDatabaseContext);
 
     /**
      * Make appContext available across the application.

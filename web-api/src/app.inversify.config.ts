@@ -8,8 +8,8 @@ import { Container } from 'inversify';
 import 'reflect-metadata';
 
 import { bindDependencies as bindConfigurationDependencies } from './common/configuration';
-import { bindDependencies as bindDataStoreDependencies } from './common/data-store';
 import { bindDependencies as bindJsonConvertedDependencies } from './common/json-converter';
+import { bindDependencies as bindDataStoreDependencies } from './data';
 
 import { bindDependencies as bindHealthCheckDependencies } from './modules/health-check';
 import { bindDependencies as bindSecurityDependencies } from './modules/security';

@@ -5,7 +5,7 @@
  */
 
 import { DataTypes, QueryInterface } from 'sequelize';
-import { encrypt } from '../../../crypto';
+import { encrypt } from '../../../common/crypto';
 
 module.exports = {
   up: async (queryInterface: QueryInterface, Sequelize: DataTypes) => {

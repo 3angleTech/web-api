@@ -5,7 +5,7 @@
  */
 
 import { JsonProperty } from 'json2typescript';
-import { ISODateConverter } from '../../json-converter';
+import { ISODateConverter } from '../../common/json-converter';
 
 export class BaseDataObject {
   @JsonProperty('createdBy', Number, true)

@@ -7,11 +7,11 @@ const models = require('./sql-db/models');
 
 import { injectable } from 'inversify';
 import { Model } from 'sequelize';
-import { Logger, LogLevel } from '../logger';
-import { ISqlContext, SqlModel } from './sql-context.interface';
+import { Logger, LogLevel } from '../common/logger';
+import { DatabaseModel, IDatabaseContext } from './database-context.interface';
 
 @injectable()
-export class SqlContext implements ISqlContext {
+export class DatabaseContext implements IDatabaseContext {
   constructor() {
     this.initialize();
   }
@@ -27,7 +27,7 @@ export class SqlContext implements ISqlContext {
       });
   }
 
-  public getModel(model: SqlModel): Model<any, any> {
+  public getModel(model: DatabaseModel): Model<any, any> {
     return models[model];
   }
 }

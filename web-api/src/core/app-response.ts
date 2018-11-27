@@ -5,7 +5,7 @@
  */
 
 import { Response } from 'express';
-import { User } from '../common/data-store';
+import { User } from '../data';
 
 export interface UserContext {
   user: User;
