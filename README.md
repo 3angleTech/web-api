@@ -51,7 +51,7 @@ The application uses the [Sequelize ORM](http://docs.sequelizejs.com) for managi
 
 To generate a new database model, in the `web-api` folder, run:
 ```
-$ npm run sequelize model:generate --name User --attributes username:string,password:string
+$ npm run sequelize model:generate -- --name User --attributes username:string,password:string
 ```
 
 which will generate the `user` file in the `models` folder along w/ a migration script `XXXXXXXXXXXXXX-create-user.js` in the `migrations` folder.
