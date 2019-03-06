@@ -68,3 +68,15 @@ To apply the new sequelize scripts in the DB we need to run
 ```
 $ npm run prepare-db
 ```
+
+To revert a specific seed, we need to run the following command:
+```
+$ npm run sequelize db:seed:undo -- --seed "seeder-name"
+```
+
+To run a specific seed, we need to run the following command:
+```
+$ npm run sequelize db:seed -- --seed "seeder-name"
+```
+
+To see which seeders were already run, query the `data_meta` table in the database. There is no explicit Sequelize command that shows this information.
