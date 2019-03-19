@@ -28,6 +28,7 @@ export class OAuthServerModel implements IOAuthServerModel {
       userId: user.id,
       expirySeconds: client.accessTokenLifetime,
       clientId: client.id,
+      // TODO: this is not client secret, it's accessToken secret
       clientSecret: this.oauthConfig.accessTokenSecret,
       grants: <string[]>client.grants,
     });

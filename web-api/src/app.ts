@@ -26,11 +26,28 @@ class App {
 
   constructor() {
     this.express = express();
-    this.express.use(cors());
+    this.enableCORS();
     this.initialize();
     this.initControllers();
     this.registerMiddlewares();
     this.registerRoutes();
+  }
+
+  private enableCORS(): void {
+    /**
+     * Configure server to deal with CORS.
+     * For more info see:
+     * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+     */
+    this.express.all('/*', (req: Request, res: Response, next: NextFunction) => {
+      const origin = <string>req.headers.origin || '*';
+      res.header('Access-Control-Allow-Origin', origin);
+      res.header('Access-Control-Allow-Credentials', 'true');
+      res.header('Access-Control-Allow-Methods', 'POST,PUT,GET,DELETE');
+      res.header('Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+      next();
+    });
   }
 
   private initialize(): void {
