@@ -14,6 +14,8 @@ import { bindDependencies as bindDataDependencies } from './data';
 import { bindDependencies as bindHealthCheckDependencies } from './modules/health-check';
 import { bindDependencies as bindSecurityDependencies } from './modules/security';
 
+import { bindDependencies as bindSendGridDependencies } from './common/sendgrid';
+
 const appContainer = new Container();
 
 /**
@@ -24,5 +26,6 @@ bindDataDependencies(appContainer);
 bindJsonConvertedDependencies(appContainer);
 bindHealthCheckDependencies(appContainer);
 bindSecurityDependencies(appContainer);
+bindSendGridDependencies(appContainer);
 
 export { appContainer };
