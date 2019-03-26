@@ -80,3 +80,11 @@ $ npm run sequelize db:seed -- --seed "seeder-name"
 ```
 
 To see which seeders were already run, query the `data_meta` table in the database. There is no explicit Sequelize command that shows this information.
+
+## SendGrid configuration
+
+To use SendGrid, you need to configure your API key. This is done with the following commands, where YOUR_API_KEY is your SendGrid API key.
+```
+echo "export SENDGRID_API_KEY='YOUR_API_KEY'" > sendgrid.env
+source ./sendgrid.env
+```
