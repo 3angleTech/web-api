@@ -6,13 +6,15 @@
 
 import { MailService } from '@sendgrid/mail';
 import { injectable } from 'inversify';
+import { ActivateAccountParams } from '../../data/data-objects/email/activate-account-params.do';
+import { EmailParams } from '../../data/data-objects/email/email-params.do';
+import { NewAccountParams } from '../../data/data-objects/email/new-account-params.do';
 import { Logger, LogLevel } from '../logger';
-import { EmailParams } from './email-params.do';
+import { IEmailService } from './email.service.interface';
 import { HttpStatus } from './http-status';
-import { ISendGridService } from './sendgrid.service.interface';
 
 @injectable()
-export class SendGridService implements ISendGridService {
+export class SendGridService implements IEmailService {
 
     private static instance: SendGridService;
     private sgMailService: any;
@@ -22,7 +24,6 @@ export class SendGridService implements ISendGridService {
             return SendGridService.instance;
         }
         this.sgMailService = require('@sendgrid/mail');
-        this.setApiKey();
         SendGridService.instance = this;
     }
 
@@ -30,7 +31,20 @@ export class SendGridService implements ISendGridService {
         this.sgMailService.setApiKey(process.env.SENDGRID_API_KEY);
     }
 
+    public async sendActivateAccountEmail(params: ActivateAccountParams): Promise<void> {
+        // TODO: Integrate JWT token in e-mail
+        await this.sendEmail(params);
+        return Promise.resolve();
+    }
+
+    public async sendNewAccountEmail(params: NewAccountParams): Promise<void> {
+        // TODO: Pass parameters such as username in e-mail
+        await this.sendEmail(params);
+        return Promise.resolve();
+    }
+
     public async sendEmail(params: EmailParams): Promise<void> {
+        this.setApiKey();
         const message = {
             to: params.to,
             from: params.from,

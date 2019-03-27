@@ -3,8 +3,8 @@
  * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
-import { EmailParams } from './email-params.do';
-export interface ISendGridService {
+import { EmailParams } from '../../data/data-objects/email/email-params.do';
+export interface IEmailService {
     sendEmail(params: EmailParams): Promise<void>;
 }
-export const ISendGridService = Symbol.for('ISendGridService');
+export const IEmailService = Symbol.for('IEmailService');

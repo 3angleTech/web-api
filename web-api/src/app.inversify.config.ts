@@ -14,7 +14,7 @@ import { bindDependencies as bindDataDependencies } from './data';
 import { bindDependencies as bindHealthCheckDependencies } from './modules/health-check';
 import { bindDependencies as bindSecurityDependencies } from './modules/security';
 
-import { bindDependencies as bindSendGridDependencies } from './common/sendgrid';
+import { bindDependencies as bindEmailDependencies } from './common/email';
 
 const appContainer = new Container();
 
@@ -26,6 +26,6 @@ bindDataDependencies(appContainer);
 bindJsonConvertedDependencies(appContainer);
 bindHealthCheckDependencies(appContainer);
 bindSecurityDependencies(appContainer);
-bindSendGridDependencies(appContainer);
+bindEmailDependencies(appContainer);
 
 export { appContainer };
