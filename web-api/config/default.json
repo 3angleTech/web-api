@@ -12,17 +12,26 @@
     "algorithm": "HS256",
     "accessTokenSecret": "bsdhajg6uU%#@^UT#HJAgdsjhdgfa",
     "refreshTokenSecret": "_sdta%23gfhzHJDFAGfvgz!@rFgt65^4",
-    "clients": [
-      {
-        "id": "3at-api",
-        "secret": "5r5rd15c650f4849119eb894939d9fdaaf5f7d0e7e0f65de15b71bfa6411011y",
-        "grants": [
-          "password",
-          "refresh_token"
-        ],
-        "accessTokenExpirySeconds": 900,
-        "refreshTokenExpirySeconds": 172800
-      }
-    ]
+    "clients": [{
+      "id": "3at-api",
+      "secret": "5r5rd15c650f4849119eb894939d9fdaaf5f7d0e7e0f65de15b71bfa6411011y",
+      "grants": [
+        "password",
+        "refresh_token"
+      ],
+      "accessTokenExpirySeconds": 900,
+      "refreshTokenExpirySeconds": 172800
+    }]
+  },
+  "emailProvider": "SendGrid",
+  "emailTemplates": {
+    "activation": {
+      "subject": "Account created",
+      "html": "<p>Here is your activation token: <strong>[JWT_TOKEN]</strong></p>",
+      "raw": "Here is your activation token: [JWT_TOKEN]"
+    }
+  },
+  "emailParams": {
+    "from": "contact+opensource@3angle.tech"
   }
 }

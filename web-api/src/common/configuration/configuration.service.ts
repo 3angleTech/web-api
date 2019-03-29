@@ -7,13 +7,26 @@
 import * as config from 'config';
 import { injectable } from 'inversify';
 
-import { IConfigurationService, OAuthConfiguration } from './configuration.service.interface';
+import { EmailProvider } from '../email/email-provider.enum';
+import { EmailParams, EmailTemplates, IConfigurationService, OAuthConfiguration } from './configuration.service.interface';
 
 @injectable()
 export class ConfigurationService implements IConfigurationService {
 
   public getOAuthConfig(): OAuthConfiguration {
     return config.get<OAuthConfiguration>('oauth');
+  }
+
+  public getEmailProvider(): EmailProvider {
+    return config.get<EmailProvider>('emailProvider');
+  }
+
+  public getEmailTemplates(): EmailTemplates {
+    return config.get<EmailTemplates>('emailTemplates');
+  }
+
+  public getEmailParams(): EmailParams {
+    return config.get<EmailParams>('emailParams');
   }
 
 }
