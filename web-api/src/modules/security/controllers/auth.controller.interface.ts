@@ -16,5 +16,6 @@ export interface IAuthController {
   token(req: AppRequest, res: AppResponse, next: NextFunction): void;
   getAccount(req: AppRequest, res: AppResponse, next: NextFunction): void;
   logout(req: AppRequest, res: AppResponse, next: NextFunction): void;
+  activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): void;
 }
 export const IAuthController = Symbol.for('IAuthController');

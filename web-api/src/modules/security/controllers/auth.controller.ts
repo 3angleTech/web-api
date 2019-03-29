@@ -22,6 +22,7 @@ export class AuthController implements IAuthController {
   ) {
     this.token = this.token.bind(this);
     this.getAccount = this.getAccount.bind(this);
+    this.activateAccount = this.activateAccount.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -57,6 +58,10 @@ export class AuthController implements IAuthController {
     const userId = res.getUserContext().user.id;
     const user = await this.accountService.find(userId);
     res.json(user);
+  }
+
+  public async activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
+    // TODO: activate account based on generated token
   }
 
   public logout(req: AppRequest, res: AppResponse, next: NextFunction): void {

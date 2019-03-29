@@ -100,6 +100,8 @@ class App {
 
     router.route('/account/me')
       .get(authenticated, this.authController.getAccount);
+    router.route('/account/activate')
+      .get(this.authController.activateAccount);
 
     this.express.use('/api/v1', router);
     this.express.use(errorMiddleware);
