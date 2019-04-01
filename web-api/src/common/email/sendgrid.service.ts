@@ -18,18 +18,13 @@ import { HttpStatus } from './http-status';
 @injectable()
 export class SendGridService implements IEmailService {
 
-    private static instance: SendGridService;
     private sgMailService: any;
 
     constructor(
         @inject(IConfigurationService) private configuration: IConfigurationService,
         @inject(IEmailTemplateService) private emailTemplateService: IEmailTemplateService,
     ) {
-        if (SendGridService.instance) {
-            return SendGridService.instance;
-        }
         this.sgMailService = require('@sendgrid/mail');
-        SendGridService.instance = this;
     }
 
     private setApiKey(): void {
@@ -63,7 +58,7 @@ export class SendGridService implements IEmailService {
             text: params.rawText,
             html: params.htmlText,
         };
-        Logger.getInstance().log(LogLevel.Debug, 'Sending e-mail...', message);
+        Logger.getInstance().log(LogLevel.Debug, 'Sending e-mail...');
         const response = await this.sgMailService.send(message);
         const statusCode = response[0].statusCode;
         if (statusCode === HttpStatus.ACCEPTED) {

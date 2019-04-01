@@ -14,14 +14,7 @@ import { IEmailService } from './email.service.interface';
 @injectable()
 export class MockEmailService implements IEmailService {
 
-    private static instance: MockEmailService;
-
-    constructor() {
-        if (MockEmailService.instance) {
-            return MockEmailService.instance;
-        }
-        MockEmailService.instance = this;
-    }
+    constructor() { }
 
     public async sendAccountActivationEmail(params: ActivateAccountParams): Promise<void> {
         this.sendEmail(params);

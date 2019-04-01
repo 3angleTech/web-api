@@ -17,9 +17,9 @@ export function bindDependencies(container: Container): void {
     const configurationService = container.get<IConfigurationService>(IConfigurationService);
     const emailProvider = configurationService.getEmailProvider();
     if (emailProvider === EmailProvider.SendGrid) {
-        container.bind<IEmailService>(IEmailService).to(SendGridService);
+        container.bind<IEmailService>(IEmailService).to(SendGridService).inSingletonScope();
     } else {
-        container.bind<IEmailService>(IEmailService).to(MockEmailService);
+        container.bind<IEmailService>(IEmailService).to(MockEmailService).inSingletonScope();
     }
 
     container.bind<IEmailTemplateService>(IEmailTemplateService).to(EmailTemplateService).inSingletonScope();
