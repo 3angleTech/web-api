@@ -34,6 +34,10 @@ module.exports = {
       last_name: {
         type: Sequelize.STRING,
       },
+      active: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       created_by: {
         allowNull: false,
         type: Sequelize.INTEGER,

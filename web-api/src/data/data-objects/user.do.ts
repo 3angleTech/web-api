@@ -26,4 +26,8 @@ export class User extends BaseDataObject {
 
   @JsonProperty('lastName', String, true)
   public lastName: string = undefined;
+
+  @JsonProperty('active', String, true)
+  public active: boolean = undefined;
+
 }
