@@ -14,5 +14,6 @@ export interface Credentials {
 export interface IAccountService {
   verify(credentials: Credentials): Promise<User>;
   find(userId: number): Promise<User>;
+  activate(token: string): Promise<string>;
 }
 export const IAccountService = Symbol.for('IAccountService');

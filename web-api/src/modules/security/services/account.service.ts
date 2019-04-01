@@ -10,6 +10,7 @@ import { IConfigurationService, OAuthConfiguration } from '../../../common/confi
 import { verify } from '../../../common/crypto';
 import { IEmailService } from '../../../common/email';
 import { IJsonConverterService } from '../../../common/json-converter';
+import { Logger, LogLevel } from '../../../common/logger';
 import { DatabaseModel, IDatabaseContext, User } from '../../../data';
 import { Credentials, IAccountService } from './account.service.interface';
 import { IJwtTokenService } from './jwt-token.service.interface';
@@ -65,6 +66,18 @@ export class AccountService implements IAccountService {
       token: token,
     });
     return this.jsonConverter.deserialize(userObject, User);
+  }
+
+  public async activate(token: string): Promise<string> {
+    return new Promise<string>(async (resolve, reject) => {
+      try {
+        const decodedToken = await this.tokenService.verify(token, this.configuration.getOAuthConfig().clients[0].secret);
+        Logger.getInstance().log(LogLevel.Debug, `Decoded token ${decodedToken}`);
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
   }
 
   private async generateAccessToken(user: User): Promise<string> {

@@ -61,8 +61,11 @@ export class AuthController implements IAuthController {
   }
 
   public async activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
-    Logger.getInstance().log(LogLevel.Debug, `Received token parameters: ${req.query('token')}`);
-    // TODO: activate account based on generated token
+    try {
+      await this.accountService.activate(req.query.token);
+    } catch (e) {
+      Logger.getInstance().log(LogLevel.Error, `Account activation Error: ${e}`);
+    }
   }
 
   public logout(req: AppRequest, res: AppResponse, next: NextFunction): void {
