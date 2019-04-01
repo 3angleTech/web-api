@@ -6,13 +6,13 @@
 
 import { inject, injectable } from 'inversify';
 import { isNil } from 'lodash';
-import { IConfigurationService } from '../../../common/configuration';
+import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
 import { verify } from '../../../common/crypto';
 import { IEmailService } from '../../../common/email';
 import { IJsonConverterService } from '../../../common/json-converter';
 import { DatabaseModel, IDatabaseContext, User } from '../../../data';
 import { Credentials, IAccountService } from './account.service.interface';
-import { IOAuthServerModel } from './oauth-server-model.interface';
+import { IJwtTokenService } from './jwt-token.service.interface';
 
 @injectable()
 export class AccountService implements IAccountService {
@@ -20,8 +20,8 @@ export class AccountService implements IAccountService {
     @inject(IDatabaseContext) private dbContext: IDatabaseContext,
     @inject(IJsonConverterService) private jsonConverter: IJsonConverterService,
     @inject(IConfigurationService) private configuration: IConfigurationService,
-    @inject(IOAuthServerModel) private oauthServerModel: IOAuthServerModel,
     @inject(IEmailService) private emailService: IEmailService,
+    @inject(IJwtTokenService) private tokenService: IJwtTokenService,
   ) { }
 
   public async verify(credentials: Credentials): Promise<User> {
@@ -58,7 +58,7 @@ export class AccountService implements IAccountService {
     if (isNil(userObject)) {
       throw new Error('Account not created');
     }
-    const token = await this.generateToken(user);
+    const token = await this.generateAccessToken(user);
     const params = {
       to: user.email,
       from: this.configuration.getEmailParams().from,
@@ -71,12 +71,18 @@ export class AccountService implements IAccountService {
     return this.jsonConverter.deserialize(userObject, User);
   }
 
-  private async generateToken(user: User): Promise<string> {
-    return this.oauthServerModel.generateAccessToken(
-      this.configuration.getOAuthConfig().clients[0],
-      user,
-      '',
-    );
+  private async generateAccessToken(user: User): Promise<string> {
+    return this.tokenService.generate({
+      userId: user.id,
+      clientId: this.oauthConfig.clients[0].id,
+      clientSecret: this.oauthConfig.clients[0].secret,
+      expirySeconds: this.oauthConfig.clients[0].accessTokenExpirySeconds,
+      grants: this.oauthConfig.clients[0].grants,
+    });
+  }
+
+  private get oauthConfig(): OAuthConfiguration {
+    return this.configuration.getOAuthConfig();
   }
 
 }
