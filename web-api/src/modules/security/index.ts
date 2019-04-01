@@ -17,7 +17,7 @@ import { IOAuthServerModel } from './services/oauth-server-model.interface';
 import { IOAuthServer } from './services/oauth-server.interface';
 
 export function bindDependencies(container: Container): void {
-  container.bind<IAccountService>(IAccountService).to(AccountService);
+  container.bind<IAccountService>(IAccountService).to(AccountService).inSingletonScope();
   container.bind<IJwtTokenService>(IJwtTokenService).to(JwtTokenService);
   container.bind<IOAuthServerModel>(IOAuthServerModel).to(OAuthServerModel);
   container.bind<IOAuthServer>(IOAuthServer).to(OAuthServer).inSingletonScope();
