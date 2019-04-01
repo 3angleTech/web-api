@@ -61,6 +61,7 @@ export class AuthController implements IAuthController {
   }
 
   public async activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
+    Logger.getInstance().log(LogLevel.Debug, `Received token parameters: ${req.query('token')}`);
     // TODO: activate account based on generated token
   }
 

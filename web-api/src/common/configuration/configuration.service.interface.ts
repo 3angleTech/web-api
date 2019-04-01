@@ -29,7 +29,7 @@ export interface EmailTemplates {
   activation: EmailTemplate;
 }
 
-export interface EmailParams {
+export interface EmailConfigurationParams {
   from: string;
 }
 
@@ -37,6 +37,6 @@ export interface IConfigurationService {
   getOAuthConfig(): OAuthConfiguration;
   getEmailProvider(): EmailProvider;
   getEmailTemplates(): EmailTemplates;
-  getEmailParams(): EmailParams;
+  getEmailConfigurationParams(): EmailConfigurationParams;
 }
 export const IConfigurationService = Symbol.for('IConfigurationService');

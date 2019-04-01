@@ -7,6 +7,8 @@
 import { Container } from 'inversify';
 import { IConfigurationService } from '../configuration';
 import { EmailProvider } from './email-provider.enum';
+import { EmailTemplateService } from './email-template.service';
+import { IEmailTemplateService } from './email-template.service.interface';
 import { IEmailService } from './email.service.interface';
 import { MockEmailService } from './mock-email.service';
 import { SendGridService } from './sendgrid.service';
@@ -19,5 +21,7 @@ export function bindDependencies(container: Container): void {
     } else {
         container.bind<IEmailService>(IEmailService).to(MockEmailService);
     }
+
+    container.bind<IEmailTemplateService>(IEmailTemplateService).to(EmailTemplateService).inSingletonScope();
 }
 export * from './email.service.interface';

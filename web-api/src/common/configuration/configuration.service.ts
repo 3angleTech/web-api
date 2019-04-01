@@ -8,7 +8,7 @@ import * as config from 'config';
 import { injectable } from 'inversify';
 
 import { EmailProvider } from '../email/email-provider.enum';
-import { EmailParams, EmailTemplates, IConfigurationService, OAuthConfiguration } from './configuration.service.interface';
+import { EmailConfigurationParams, EmailTemplates, IConfigurationService, OAuthConfiguration } from './configuration.service.interface';
 
 @injectable()
 export class ConfigurationService implements IConfigurationService {
@@ -25,8 +25,8 @@ export class ConfigurationService implements IConfigurationService {
     return config.get<EmailTemplates>('emailTemplates');
   }
 
-  public getEmailParams(): EmailParams {
-    return config.get<EmailParams>('emailParams');
+  public getEmailConfigurationParams(): EmailConfigurationParams {
+    return config.get<EmailConfigurationParams>('emailParams');
   }
 
 }

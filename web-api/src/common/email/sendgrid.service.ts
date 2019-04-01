@@ -9,8 +9,9 @@ import { inject, injectable } from 'inversify';
 import { ActivateAccountParams as AccountActivationParams } from '../../data/data-objects/email/activate-account-params.do';
 import { EmailParams } from '../../data/data-objects/email/email-params.do';
 import { NewAccountParams } from '../../data/data-objects/email/new-account-params.do';
-import { EmailTemplate, EmailTemplates, IConfigurationService } from '../configuration';
+import { IConfigurationService } from '../configuration';
 import { Logger, LogLevel } from '../logger';
+import { IEmailTemplateService } from './email-template.service.interface';
 import { IEmailService } from './email.service.interface';
 import { HttpStatus } from './http-status';
 
@@ -22,6 +23,7 @@ export class SendGridService implements IEmailService {
 
     constructor(
         @inject(IConfigurationService) private configuration: IConfigurationService,
+        @inject(IEmailTemplateService) private emailTemplateService: IEmailTemplateService,
     ) {
         if (SendGridService.instance) {
             return SendGridService.instance;
@@ -35,13 +37,13 @@ export class SendGridService implements IEmailService {
     }
 
     public async sendAccountActivationEmail(params: AccountActivationParams): Promise<void> {
-        let template = this.getTemplate('activation');
+        let template = this.emailTemplateService.getTemplate('activation');
         const replaceTags = {
             '[JWT_TOKEN]': params.token,
         };
-        template = this.replaceTemplateTags(template, replaceTags);
+        template = this.emailTemplateService.replaceTemplateTags(template, replaceTags);
         let localParams = { ...params };
-        localParams = this.setTextParams(localParams, template);
+        localParams = this.emailTemplateService.setTextParams(localParams, template);
         await this.sendEmail(localParams);
         return Promise.resolve();
     }
@@ -72,29 +74,6 @@ export class SendGridService implements IEmailService {
             parameters: params,
         });
         throw new Error(`Error Sending Email to ${params.to}`);
-    }
-
-    private getTemplate(key: string): EmailTemplate {
-        const emailTemplates: EmailTemplates = this.configuration.getEmailTemplates();
-        return emailTemplates[key];
-    }
-
-    private setTextParams(params: AccountActivationParams, template: EmailTemplate): AccountActivationParams {
-        params.rawText = template.raw;
-        params.htmlText = template.html;
-        return params;
-    }
-
-    private replaceTemplateTags(template: EmailTemplate, associations: any): EmailTemplate {
-        const newTemplate: EmailTemplate = {
-            html: '',
-            raw: '',
-        };
-        Object.keys(associations).forEach(key => {
-            newTemplate.html = template.html.replace(key, associations[key]);
-            newTemplate.raw = template.raw.replace(key, associations[key]);
-        });
-        return newTemplate;
     }
 
     private async printApiKeys(): Promise<void> {

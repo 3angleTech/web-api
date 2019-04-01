@@ -59,15 +59,11 @@ export class AccountService implements IAccountService {
       throw new Error('Account not created');
     }
     const token = await this.generateAccessToken(user);
-    const params = {
+    this.emailService.sendAccountActivationEmail({
       to: user.email,
-      from: this.configuration.getEmailParams().from,
-      subject: '',
-      rawText: '',
-      htmlText: '',
+      from: this.configuration.getEmailConfigurationParams().from,
       token: token,
-    };
-    this.emailService.sendAccountActivationEmail(params);
+    });
     return this.jsonConverter.deserialize(userObject, User);
   }
 
