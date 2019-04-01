@@ -24,6 +24,7 @@ export interface OAuthConfiguration {
 export interface EmailTemplate {
   html: string;
   raw: string;
+  subject: string;
 }
 export interface EmailTemplates {
   activation: EmailTemplate;

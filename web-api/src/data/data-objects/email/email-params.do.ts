@@ -15,12 +15,12 @@ export class EmailParams {
     public from: string = undefined;
 
     @JsonProperty('subject', String, true)
-    public subject?: string = undefined;
+    public subject: string = undefined;
 
     @JsonProperty('text', String, true)
-    public rawText?: string = undefined;
+    public rawText: string = undefined;
 
     @JsonProperty('html', String, true)
-    public htmlText?: string = undefined;
+    public htmlText: string = undefined;
 
 }

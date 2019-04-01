@@ -54,25 +54,27 @@ export class AccountService implements IAccountService {
     return this.jsonConverter.deserialize(userObject, User);
   }
 
-  public async create(user: User): Promise<User> {
-    const userObject = await this.dbContext.getModel(DatabaseModel.Users).create(user);
-    if (isNil(userObject)) {
-      throw new Error('Account not created');
-    }
-    const token = await this.generateAccessToken(user);
-    this.emailService.sendAccountActivationEmail({
-      to: user.email,
-      from: this.configuration.getEmailConfigurationParams().from,
-      token: token,
-    });
-    return this.jsonConverter.deserialize(userObject, User);
-  }
-
   public async activate(token: string): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
       try {
-        const decodedToken = await this.tokenService.verify(token, this.configuration.getOAuthConfig().clients[0].secret);
-        Logger.getInstance().log(LogLevel.Debug, `Decoded token ${decodedToken}`);
+        const jwtToken = await this.tokenService.verify(token, this.configuration.getOAuthConfig().clients[0].secret);
+        if (isNil(jwtToken.userId)) {
+          throw new Error('Token doesn\'t have the user ID set');
+        }
+        Logger.getInstance().log(LogLevel.Debug, `Decoded token ${jwtToken.userId}`);
+        const result = await this.dbContext.getModel(DatabaseModel.Users).update({
+          active: true,
+        }, {
+            where: {
+              id: jwtToken.userId,
+            },
+            returning: true,
+          });
+        const noAffectedRows: number = result[0];
+        const affectedRows: User[] = result[1];
+        if (isNil(affectedRows)) {
+          throw new Error(`User not found (ID = ${jwtToken.userId})`);
+        }
         resolve();
       } catch (e) {
         reject(e);
