@@ -5,6 +5,7 @@
  */
 
 import * as config from 'config';
+import { isString } from 'lodash';
 
 interface DatabaseConfiguration {
   username: string;
@@ -16,13 +17,14 @@ interface DatabaseConfiguration {
 }
 
 const dbConnection = config.get<DatabaseConfiguration>('db-connection');
+const port = isString(dbConnection.port) ? parseInt(dbConnection.port, 10) : dbConnection.port;
 
 module.exports = {
   username: dbConnection.username,
   password: dbConnection.password,
   database: dbConnection.database,
   host: dbConnection.host,
-  port: dbConnection.port,
+  port: port,
   dialect: dbConnection.dialect,
   migrationStorage: 'sequelize',
   migrationStorageTableName: 'sequelize_meta',
