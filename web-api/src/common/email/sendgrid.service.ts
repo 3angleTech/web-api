@@ -6,13 +6,10 @@
 
 import * as sendGrid from '@sendgrid/mail';
 import { inject, injectable } from 'inversify';
-import { ActivateAccountParams as AccountActivationParams } from '../../data/data-objects/email/activate-account-params.do';
-import { EmailParams } from '../../data/data-objects/email/email-params.do';
-import { NewAccountParams } from '../../data/data-objects/email/new-account-params.do';
 import { IConfigurationService } from '../configuration';
 import { Logger, LogLevel } from '../logger';
 import { IEmailTemplateService } from './email-template.service.interface';
-import { IEmailService } from './email.service.interface';
+import { ActivateAccountParams, EmailParams, IEmailService, NewAccountParams } from './email.service.interface';
 import { HttpStatus } from './http-status';
 
 @injectable()
@@ -29,7 +26,7 @@ export class SendGridService implements IEmailService {
         sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
     }
 
-    public async sendAccountActivationEmail(params: AccountActivationParams): Promise<void> {
+    public async sendAccountActivationEmail(params: ActivateAccountParams): Promise<void> {
         let template = this.emailTemplateService.getTemplate('activation');
         const replaceTags = {
             '[JWT_TOKEN]': params.token,

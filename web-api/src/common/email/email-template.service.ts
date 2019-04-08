@@ -4,9 +4,9 @@
  * Available under MIT license webApi/LICENSE
  */
 import { inject, injectable } from 'inversify';
-import { EmailParams } from '../../data/data-objects/email/email-params.do';
 import { EmailTemplate, EmailTemplates, IConfigurationService } from '../configuration';
 import { IEmailTemplateService } from './email-template.service.interface';
+import { EmailParams } from './email.service.interface';
 
 @injectable()
 export class EmailTemplateService implements IEmailTemplateService {

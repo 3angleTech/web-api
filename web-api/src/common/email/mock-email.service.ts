@@ -5,11 +5,8 @@
  */
 
 import { injectable } from 'inversify';
-import { ActivateAccountParams } from '../../data/data-objects/email/activate-account-params.do';
-import { EmailParams } from '../../data/data-objects/email/email-params.do';
-import { NewAccountParams } from '../../data/data-objects/email/new-account-params.do';
 import { Logger, LogLevel } from '../logger';
-import { IEmailService } from './email.service.interface';
+import { ActivateAccountParams, EmailParams, IEmailService, NewAccountParams } from './email.service.interface';
 
 @injectable()
 export class MockEmailService implements IEmailService {

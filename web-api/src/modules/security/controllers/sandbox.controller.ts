@@ -6,9 +6,8 @@
 
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
-import { IEmailService } from '../../../common/email';
+import { EmailParams, IEmailService } from '../../../common/email';
 import { AppRequest, AppResponse } from '../../../core';
-import { EmailParams } from '../../../data/data-objects/email/email-params.do';
 
 export interface ISandboxController {
   sendMail(req: AppRequest, res: AppResponse, next: NextFunction): void;

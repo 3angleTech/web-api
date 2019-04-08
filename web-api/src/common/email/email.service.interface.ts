@@ -3,8 +3,22 @@
  * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
-import { ActivateAccountParams } from '../../data/data-objects/email/activate-account-params.do';
-import { EmailParams } from '../../data/data-objects/email/email-params.do';
+
+export interface EmailParams {
+  to: string;
+  from: string;
+  subject: string;
+  text: string;
+  html: string;
+}
+
+export interface ActivateAccountParams extends EmailParams {
+  token: string;
+}
+
+export interface NewAccountParams extends EmailParams {
+  username: string;
+}
 
 export interface IEmailService {
     sendEmail(params: EmailParams): Promise<void>;
