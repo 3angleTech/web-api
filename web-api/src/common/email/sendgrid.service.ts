@@ -4,7 +4,7 @@
  * Available under MIT license webApi/LICENSE
  */
 
-import { MailService } from '@sendgrid/mail';
+import * as sendGrid from '@sendgrid/mail';
 import { inject, injectable } from 'inversify';
 import { ActivateAccountParams as AccountActivationParams } from '../../data/data-objects/email/activate-account-params.do';
 import { EmailParams } from '../../data/data-objects/email/email-params.do';
@@ -18,17 +18,15 @@ import { HttpStatus } from './http-status';
 @injectable()
 export class SendGridService implements IEmailService {
 
-    private sgMailService: any;
-
     constructor(
         @inject(IConfigurationService) private configuration: IConfigurationService,
         @inject(IEmailTemplateService) private emailTemplateService: IEmailTemplateService,
     ) {
-        this.sgMailService = require('@sendgrid/mail');
+      this.setApiKey();
     }
 
     private setApiKey(): void {
-        this.sgMailService.setApiKey(process.env.SENDGRID_API_KEY);
+        sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
     }
 
     public async sendAccountActivationEmail(params: AccountActivationParams): Promise<void> {
@@ -50,7 +48,6 @@ export class SendGridService implements IEmailService {
     }
 
     public async sendEmail(params: EmailParams): Promise<void> {
-        this.setApiKey();
         const message = {
             to: params.to,
             from: params.from,
@@ -58,8 +55,7 @@ export class SendGridService implements IEmailService {
             text: params.text,
             html: params.html,
         };
-        Logger.getInstance().log(LogLevel.Debug, 'Sending e-mail...');
-        const response = await this.sgMailService.send(message);
+        const response = await sendGrid.send(message);
         const statusCode = response[0].statusCode;
         if (statusCode === HttpStatus.ACCEPTED) {
             return;
