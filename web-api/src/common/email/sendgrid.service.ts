@@ -70,14 +70,4 @@ export class SendGridService implements IEmailService {
         });
         throw new Error(`Error Sending Email to ${params.to}`);
     }
-
-    private async printApiKeys(): Promise<void> {
-        const request = {
-            method: 'GET',
-            url: '/v3/api_keys',
-        };
-        const response = await this.sgMailService.request(request);
-        Logger.getInstance().log(LogLevel.Debug, `API Keys: ${response.body}`);
-    }
-
 }
