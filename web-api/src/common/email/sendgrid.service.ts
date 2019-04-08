@@ -56,7 +56,7 @@ export class SendGridService implements IEmailService {
             from: params.from,
             subject: params.subject,
             text: params.text,
-            html: params.htmlText,
+            html: params.html,
         };
         Logger.getInstance().log(LogLevel.Debug, 'Sending e-mail...');
         const response = await this.sgMailService.send(message);

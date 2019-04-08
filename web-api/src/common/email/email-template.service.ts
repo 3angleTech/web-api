@@ -43,7 +43,7 @@ export class EmailTemplateService implements IEmailTemplateService {
 
     public setTextParams<T extends EmailParams>(params: T, template: EmailTemplate): T {
         params.text = template.text;
-        params.htmlText = template.html;
+        params.html = template.html;
         params.subject = template.subject;
         return params;
     }
