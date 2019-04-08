@@ -28,7 +28,7 @@
     "activation": {
       "subject": "Account created",
       "html": "<p>Here is your activation token: <strong>[JWT_TOKEN]</strong></p>",
-      "raw": "Here is your activation token: [JWT_TOKEN]"
+      "text": "Here is your activation token: [JWT_TOKEN]"
     }
   },
   "emailParams": {

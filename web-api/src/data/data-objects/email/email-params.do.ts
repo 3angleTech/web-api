@@ -18,7 +18,7 @@ export class EmailParams {
     public subject: string = undefined;
 
     @JsonProperty('text', String, true)
-    public rawText: string = undefined;
+    public text: string = undefined;
 
     @JsonProperty('html', String, true)
     public htmlText: string = undefined;

@@ -23,7 +23,7 @@ export interface OAuthConfiguration {
 
 export interface EmailTemplate {
   html: string;
-  raw: string;
+  text: string;
   subject: string;
 }
 export interface EmailTemplates {

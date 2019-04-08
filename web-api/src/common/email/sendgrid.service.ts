@@ -55,7 +55,7 @@ export class SendGridService implements IEmailService {
             to: params.to,
             from: params.from,
             subject: params.subject,
-            text: params.rawText,
+            text: params.text,
             html: params.htmlText,
         };
         Logger.getInstance().log(LogLevel.Debug, 'Sending e-mail...');

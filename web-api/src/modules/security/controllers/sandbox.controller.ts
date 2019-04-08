@@ -28,8 +28,8 @@ export class SandboxController implements ISandboxController {
       to: 'catalin@3angle.tech',
       from: 'webFrame@3angle.tech',
       subject: 'WebFrame test mail',
-      htmlText: 'test mail',
-      rawText: 'catalin@3angle.tech',
+      // htmlText: 'test mail',
+      text: 'text mail catalin@3angle.tech',
     };
     console.log(params);
 
