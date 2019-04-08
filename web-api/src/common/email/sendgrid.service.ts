@@ -49,7 +49,7 @@ export class SendGridService implements IEmailService {
         return Promise.resolve();
     }
 
-    private async sendEmail(params: EmailParams): Promise<void> {
+    public async sendEmail(params: EmailParams): Promise<void> {
         this.setApiKey();
         const message = {
             to: params.to,

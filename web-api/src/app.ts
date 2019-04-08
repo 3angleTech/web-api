@@ -16,13 +16,14 @@ import { errorMiddleware } from './common/error';
 import { AppContext, AppRequest, AppResponse } from './core';
 import { IDatabaseContext } from './data';
 import { IHealthCheckController } from './modules/health-check';
-import { authenticated, IAuthController } from './modules/security';
+import { authenticated, IAuthController, ISandboxController } from './modules/security';
 
 class App {
   public express: Express;
 
   private authController: IAuthController;
   private healthCheckController: IHealthCheckController;
+  private sandboxController: ISandboxController;
 
   constructor() {
     this.express = express();
@@ -66,6 +67,7 @@ class App {
   private initControllers(): void {
     this.healthCheckController = appContainer.get<IHealthCheckController>(IHealthCheckController);
     this.authController = appContainer.get<IAuthController>(IAuthController);
+    this.sandboxController = appContainer.get<ISandboxController>(ISandboxController);
   }
 
   private registerMiddlewares(): void {
@@ -102,6 +104,8 @@ class App {
       .get(authenticated, this.authController.getAccount);
     router.route('/account/activate')
       .get(this.authController.activateAccount);
+    router.route('/send-mail')
+      .get(this.sandboxController.sendMail);
 
     this.express.use('/api/v1', router);
     this.express.use(errorMiddleware);
