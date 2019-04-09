@@ -12,17 +12,7 @@ import { ActivateAccountParams, EmailParams, IEmailProviderDriver, NewAccountPar
 export class MockEmailService implements IEmailProviderDriver {
 
     constructor() { }
-
-    public async sendAccountActivationEmail(params: ActivateAccountParams): Promise<void> {
-        this.sendEmail(params);
-        return Promise.resolve();
-    }
-
-    public sendNewAccountEmail(params: NewAccountParams): Promise<void> {
-        this.sendEmail(params);
-        return Promise.resolve();
-    }
-
+    // TODO: Implement logic
     public sendEmail(params: EmailParams): Promise<void> {
         Logger.getInstance().log(LogLevel.Debug, 'Sending e-mail...');
         return Promise.resolve();

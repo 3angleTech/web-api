@@ -20,8 +20,16 @@ export interface NewAccountParams extends EmailParams {
   username: string;
 }
 
+// TODO: Add documentation
 export interface IEmailProviderDriver {
     sendEmail(params: EmailParams): Promise<void>;
-    sendAccountActivationEmail(params: ActivateAccountParams): Promise<void>;
 }
 export const IEmailProviderDriver = Symbol.for('IEmailProviderDriver');
+
+// TODO: Add documentation
+export interface IEmailService {
+  sendEmail(params: EmailParams): Promise<void>;
+  sendAccountActivationEmail(params: ActivateAccountParams): Promise<void>;
+  sendNewAccountEmail(params: NewAccountParams): Promise<void>;
+}
+export const IEmailService = Symbol.for('IEmailService');

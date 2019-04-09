@@ -6,7 +6,7 @@
 
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
-import { ActivateAccountParams, EmailParams, IEmailProviderDriver } from '../../../common/email';
+import { ActivateAccountParams, EmailParams, IEmailService } from '../../../common/email';
 import { AppRequest, AppResponse } from '../../../core';
 
 export interface ISandboxController {
@@ -18,7 +18,7 @@ export const ISandboxController = Symbol.for('ISandboxController');
 @injectable()
 export class SandboxController implements ISandboxController {
   constructor(
-    @inject(IEmailProviderDriver) private emailService: IEmailProviderDriver,
+    @inject(IEmailService) private emailService: IEmailService,
   ) {
     this.sendMail = this.sendMail.bind(this);
     this.sendActivationMail = this.sendActivationMail.bind(this);

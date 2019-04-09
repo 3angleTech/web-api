@@ -26,24 +26,6 @@ export class SendGridService implements IEmailProviderDriver {
         sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
     }
 
-    public async sendAccountActivationEmail(params: ActivateAccountParams): Promise<void> {
-        let template = this.emailTemplateService.getTemplate('activation');
-        const replaceTags = {
-            '[JWT_TOKEN]': params.token,
-        };
-        template = this.emailTemplateService.replaceTemplateTags(template, replaceTags);
-        let localParams = { ...params };
-        localParams = this.emailTemplateService.setTextParams(localParams, template);
-        await this.sendEmail(localParams);
-        return Promise.resolve();
-    }
-
-    public async sendNewAccountEmail(params: NewAccountParams): Promise<void> {
-        // TODO: Pass parameters such as username in e-mail
-        await this.sendEmail(params);
-        return Promise.resolve();
-    }
-
     public async sendEmail(params: EmailParams): Promise<void> {
         const mailData = {
             to: params.to,
