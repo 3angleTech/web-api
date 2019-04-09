@@ -8,7 +8,7 @@ import { inject, injectable } from 'inversify';
 import { isNil } from 'lodash';
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
 import { verify } from '../../../common/crypto';
-import { IEmailService } from '../../../common/email';
+import { IEmailProviderDriver } from '../../../common/email';
 import { IJsonConverterService } from '../../../common/json-converter';
 import { Logger, LogLevel } from '../../../common/logger';
 import { DatabaseModel, IDatabaseContext, User } from '../../../data';
@@ -21,7 +21,7 @@ export class AccountService implements IAccountService {
     @inject(IDatabaseContext) private dbContext: IDatabaseContext,
     @inject(IJsonConverterService) private jsonConverter: IJsonConverterService,
     @inject(IConfigurationService) private configuration: IConfigurationService,
-    @inject(IEmailService) private emailService: IEmailService,
+    @inject(IEmailProviderDriver) private emailService: IEmailProviderDriver,
     @inject(IJwtTokenService) private tokenService: IJwtTokenService,
   ) { }
 

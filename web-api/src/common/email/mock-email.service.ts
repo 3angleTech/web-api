@@ -6,10 +6,10 @@
 
 import { injectable } from 'inversify';
 import { Logger, LogLevel } from '../logger';
-import { ActivateAccountParams, EmailParams, IEmailService, NewAccountParams } from './email.service.interface';
+import { ActivateAccountParams, EmailParams, IEmailProviderDriver, NewAccountParams } from './email.service.interface';
 
 @injectable()
-export class MockEmailService implements IEmailService {
+export class MockEmailService implements IEmailProviderDriver {
 
     constructor() { }
 

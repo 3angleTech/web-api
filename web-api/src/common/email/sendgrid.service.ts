@@ -9,11 +9,11 @@ import { inject, injectable } from 'inversify';
 import { IConfigurationService } from '../configuration';
 import { Logger, LogLevel } from '../logger';
 import { IEmailTemplateService } from './email-template.service.interface';
-import { ActivateAccountParams, EmailParams, IEmailService, NewAccountParams } from './email.service.interface';
+import { ActivateAccountParams, EmailParams, IEmailProviderDriver, NewAccountParams } from './email.service.interface';
 import { HttpStatus } from './http-status';
 
 @injectable()
-export class SendGridService implements IEmailService {
+export class SendGridService implements IEmailProviderDriver {
 
     constructor(
         @inject(IConfigurationService) private configuration: IConfigurationService,
