@@ -53,10 +53,12 @@ export class SendGridService implements IEmailService {
             html: params.html,
         };
         const response = await sendGrid.send(message);
+
         const statusCode = response[0].statusCode;
         if (statusCode === HttpStatus.ACCEPTED) {
             return;
         }
+
         Logger.getInstance().log(LogLevel.Error, `Error sending e-mail to ${params.to}`, {
             sendGridResponse: response[0],
             parameters: params,

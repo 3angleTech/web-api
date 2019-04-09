@@ -6,11 +6,12 @@
 
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
-import { EmailParams, IEmailService } from '../../../common/email';
+import { ActivateAccountParams, EmailParams, IEmailService } from '../../../common/email';
 import { AppRequest, AppResponse } from '../../../core';
 
 export interface ISandboxController {
   sendMail(req: AppRequest, res: AppResponse, next: NextFunction): void;
+  sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void;
 }
 export const ISandboxController = Symbol.for('ISandboxController');
 
@@ -20,6 +21,7 @@ export class SandboxController implements ISandboxController {
     @inject(IEmailService) private emailService: IEmailService,
   ) {
     this.sendMail = this.sendMail.bind(this);
+    this.sendActivationMail = this.sendActivationMail.bind(this);
   }
 
   public sendMail(req: AppRequest, res: AppResponse, next: NextFunction): void {
@@ -35,6 +37,22 @@ export class SandboxController implements ISandboxController {
     this.emailService.sendEmail(params).then(() => {
       res.json({message: 'Mail was sent succesfully.'});
     });
-
   }
+
+  public sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void {
+    const params: ActivateAccountParams = {
+      to: 'catalin@3angle.tech',
+      from: 'webFrame@3angle.tech',
+      subject: 'WebFrame test mail',
+      html: 'test mail <strong>strong</strong>',
+      text: 'text mail catalin@3angle.tech',
+      token: '12432432432',
+    };
+    console.log(params);
+
+    this.emailService.sendAccountActivationEmail(params).then(() => {
+      res.json({message: 'Mail was sent succesfully.'});
+    });
+  }
+
 }
