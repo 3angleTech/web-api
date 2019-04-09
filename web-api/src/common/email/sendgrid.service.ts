@@ -45,14 +45,14 @@ export class SendGridService implements IEmailService {
     }
 
     public async sendEmail(params: EmailParams): Promise<void> {
-        const message = {
+        const mailData = {
             to: params.to,
             from: params.from,
             subject: params.subject,
             text: params.text,
             html: params.html,
         };
-        const response = await sendGrid.send(message);
+        const response = await sendGrid.send(mailData);
 
         const statusCode = response[0].statusCode;
         if (statusCode === HttpStatus.ACCEPTED) {
