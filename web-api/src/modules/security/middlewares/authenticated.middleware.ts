@@ -5,9 +5,9 @@
  */
 
 import { NextFunction } from 'express';
-import { isNil } from 'lodash';
 import { UnauthorizedError } from '../../../common/error';
 import { Logger, LogLevel } from '../../../common/logger';
+import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse, UserContext } from '../../../core';
 import { accessTokenCookieName } from '../controllers/auth.controller.interface';
 

@@ -5,12 +5,12 @@
  */
 
 import { inject, injectable } from 'inversify';
-import { isNil } from 'lodash';
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
 import { verify } from '../../../common/crypto';
 import { IEmailProviderDriver } from '../../../common/email';
 import { IJsonConverterService } from '../../../common/json-converter';
 import { Logger, LogLevel } from '../../../common/logger';
+import { isNil } from '../../../common/utils';
 import { DatabaseModel, IDatabaseContext, User } from '../../../data';
 import { Credentials, IAccountService } from './account.service.interface';
 import { IJwtTokenService } from './jwt-token.service.interface';

@@ -12,7 +12,7 @@
  * that will be traversed and checked if it's undefined or null.
  * e.g. memberAccessChain = "a.b" will test whether object[a][b] is null or undefined.
  */
-export function isNil(object: object, memberAccessChain?: string): boolean {
+export function isNil(object: object | number | string, memberAccessChain?: string): boolean {
   if (_isNil(object)) {
     return true;
   }
@@ -34,6 +34,6 @@ export function isNil(object: object, memberAccessChain?: string): boolean {
   return false;
 }
 
-function _isNil(object: object | string): boolean {
+function _isNil(object: object | number | string): boolean {
   return object === null || object === undefined;
 }

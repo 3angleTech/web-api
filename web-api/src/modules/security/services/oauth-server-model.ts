@@ -5,9 +5,10 @@
  */
 
 import { inject, injectable } from 'inversify';
-import { find, isNil } from 'lodash';
+import { find } from 'lodash';
 import { Client, RefreshToken, Token } from 'oauth2-server';
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
+import { isNil } from '../../../common/utils';
 import { OAuthUser } from '../data-objects/oauth-user.do';
 import { IAccountService } from './account.service.interface';
 import { IJwtTokenService } from './jwt-token.service.interface';

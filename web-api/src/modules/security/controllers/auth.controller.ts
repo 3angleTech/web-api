@@ -6,8 +6,8 @@
 
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
-import { isNil } from 'lodash';
 import { Logger, LogLevel } from '../../../common/logger';
+import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse } from '../../../core';
 import { IAccountService } from '../services/account.service.interface';
 import { IOAuthServer } from '../services/oauth-server.interface';
