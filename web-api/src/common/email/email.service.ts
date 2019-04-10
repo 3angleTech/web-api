@@ -22,10 +22,10 @@ export class EmailService implements IEmailService {
 
     public async sendAccountActivationEmail(params: ActivateAccountParams): Promise<void> {
         let template = this.emailTemplateService.getTemplate('activation');
-        const replaceTags = {
-            '[JWT_TOKEN]': params.token,
+        const parameters = {
+          activationToken: params.token,
         };
-        template = this.emailTemplateService.replaceTemplateTags(template, replaceTags);
+        template = this.emailTemplateService.compileTemplate(template, parameters);
         let localParams = { ...params };
         localParams = this.emailTemplateService.setTextParams(localParams, template);
         await this.sendEmail(localParams);

@@ -27,8 +27,8 @@
   "emailTemplates": {
     "activation": {
       "subject": "Account created",
-      "html": "<p>Here is your activation token: <strong>[JWT_TOKEN]</strong></p>",
-      "text": "Here is your activation token: [JWT_TOKEN]"
+      "html": "<p>Here is your activation token: <strong> {{activationToken}} </strong></p>",
+      "text": "Here is your activation token: {{activationToken}}"
     }
   },
   "emailParams": {

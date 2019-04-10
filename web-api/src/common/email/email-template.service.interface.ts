@@ -9,7 +9,7 @@ import { EmailParams } from './email.service.interface';
 export interface IEmailTemplateService {
 
     getTemplate(key: string): EmailTemplate;
-    replaceTemplateTags(template: EmailTemplate, associations: any): EmailTemplate;
+    compileTemplate(template: EmailTemplate, associations: any): EmailTemplate;
     setTextParams<T extends EmailParams>(params: T, template: EmailTemplate): T;
 
 }
