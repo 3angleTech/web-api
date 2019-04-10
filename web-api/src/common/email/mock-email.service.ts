@@ -14,7 +14,7 @@ export class MockEmailService implements IEmailProviderDriver {
     constructor() { }
     // TODO: Implement logic
     public sendEmail(email: Email): Promise<void> {
-        Logger.getInstance().log(LogLevel.Debug, 'Sending e-mail...');
+        console.log(email);
         return Promise.resolve();
     }
 
