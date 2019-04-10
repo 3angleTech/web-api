@@ -7,7 +7,7 @@
 import { inject, injectable } from 'inversify';
 import { IConfigurationService } from '../configuration';
 import { EmailBuilder } from './email-builder';
-import { ActivateAccountParams, Email, IEmailProviderDriver, IEmailService, NewAccountParams } from './email.service.interface';
+import { ActivateAccountParameters, Email, IEmailProviderDriver, IEmailService, NewAccountParameters } from './email.service.interface';
 
 @injectable()
 export class EmailService implements IEmailService {
@@ -22,32 +22,33 @@ export class EmailService implements IEmailService {
       this.emailDriver.sendEmail(email);
     }
 
-    public async sendAccountActivationEmail(params: ActivateAccountParams): Promise<void> {
+    public async sendAccountActivationEmail(parameters: ActivateAccountParameters): Promise<void> {
         const template = this.configuration.getEmailTemplates()['activation'];
 
         const emailBuilder = new EmailBuilder();
-        emailBuilder.to = params.to;
-        emailBuilder.from = params.from;
-        emailBuilder.subject = params.subject;
+        emailBuilder.to = parameters.to;
+        emailBuilder.from = parameters.from;
+
+        emailBuilder.subject = template.subject;
         emailBuilder.html = template.html;
         emailBuilder.text = template.text;
 
-        const parameters = {
-          activationToken: params.token,
+        const templateVariables = {
+          activationToken: parameters.token,
         };
 
         const email = emailBuilder.build({
-          html: parameters,
-          text: parameters,
+          html: templateVariables,
+          text: templateVariables,
         });
 
         await this.sendEmail(email);
         return Promise.resolve();
     }
 
-    public async sendNewAccountEmail(params: NewAccountParams): Promise<void> {
+    public async sendNewAccountEmail(parameters: NewAccountParameters): Promise<void> {
         // TODO: Pass parameters such as username in e-mail
-        await this.sendEmail(params);
+        await this.sendEmail(null);
         return Promise.resolve();
     }
 }

@@ -18,32 +18,28 @@ export interface EmailTemplateVariables {
   text?: Object;
 }
 
-export interface EmailParams {
+export interface ActivateAccountParameters {
   to: string;
   from: string;
-  subject: string;
-  text: string;
-  html: string;
-}
-
-export interface ActivateAccountParams extends EmailParams {
   token: string;
 }
 
-export interface NewAccountParams extends EmailParams {
+export interface NewAccountParameters {
+  to: string;
+  from: string;
   username: string;
 }
 
 // TODO: Add documentation
 export interface IEmailProviderDriver {
-    sendEmail(params: EmailParams): Promise<void>;
+    sendEmail(email: Email): Promise<void>;
 }
 export const IEmailProviderDriver = Symbol.for('IEmailProviderDriver');
 
 // TODO: Add documentation
 export interface IEmailService {
-  sendEmail(params: EmailParams): Promise<void>;
-  sendAccountActivationEmail(params: ActivateAccountParams): Promise<void>;
-  sendNewAccountEmail(params: NewAccountParams): Promise<void>;
+  sendEmail(email: Email): Promise<void>;
+  sendAccountActivationEmail(parameters: ActivateAccountParameters): Promise<void>;
+  sendNewAccountEmail(parameters: NewAccountParameters): Promise<void>;
 }
 export const IEmailService = Symbol.for('IEmailService');

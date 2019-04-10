@@ -8,7 +8,7 @@ import * as sendGrid from '@sendgrid/mail';
 import { inject, injectable } from 'inversify';
 import { IConfigurationService } from '../configuration';
 import { Logger, LogLevel } from '../logger';
-import { ActivateAccountParams, EmailParams, IEmailProviderDriver, NewAccountParams } from './email.service.interface';
+import { Email, IEmailProviderDriver } from './email.service.interface';
 import { HttpStatus } from './http-status';
 
 @injectable()
@@ -24,13 +24,13 @@ export class SendGridService implements IEmailProviderDriver {
         sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
     }
 
-    public async sendEmail(params: EmailParams): Promise<void> {
+    public async sendEmail(email: Email): Promise<void> {
         const mailData = {
-            to: params.to,
-            from: params.from,
-            subject: params.subject,
-            text: params.text,
-            html: params.html,
+            to: email.to,
+            from: email.from,
+            subject: email.subject,
+            text: email.text,
+            html: email.html,
         };
         const response = await sendGrid.send(mailData);
 
@@ -39,10 +39,10 @@ export class SendGridService implements IEmailProviderDriver {
             return;
         }
 
-        Logger.getInstance().log(LogLevel.Error, `Error sending e-mail to ${params.to}`, {
+        Logger.getInstance().log(LogLevel.Error, `Error sending e-mail to ${email.to}`, {
             sendGridResponse: response[0],
-            parameters: params,
+            email: email,
         });
-        throw new Error(`Error Sending Email to ${params.to}`);
+        throw new Error(`Error Sending Email to ${email.to}`);
     }
 }

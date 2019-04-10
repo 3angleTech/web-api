@@ -6,7 +6,7 @@
 
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
-import { ActivateAccountParams, EmailParams, IEmailService } from '../../../common/email';
+import { ActivateAccountParameters, Email, IEmailService } from '../../../common/email';
 import { AppRequest, AppResponse } from '../../../core';
 
 export interface ISandboxController {
@@ -25,7 +25,7 @@ export class SandboxController implements ISandboxController {
   }
 
   public sendMail(req: AppRequest, res: AppResponse, next: NextFunction): void {
-    const params: EmailParams = {
+    const params: Email = {
       to: 'catalin@3angle.tech',
       from: 'webFrame@3angle.tech',
       subject: 'WebFrame test mail',
@@ -40,15 +40,11 @@ export class SandboxController implements ISandboxController {
   }
 
   public sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void {
-    const params: ActivateAccountParams = {
+    const params: ActivateAccountParameters = {
       to: 'catalin@3angle.tech',
       from: 'webFrame@3angle.tech',
-      subject: 'WebFrame test mail',
-      html: 'test mail <strong>strong</strong>',
-      text: 'text mail catalin@3angle.tech',
       token: '12432432432',
     };
-    console.log(params);
 
     this.emailService.sendAccountActivationEmail(params).then(() => {
       res.json({message: 'Mail was sent succesfully.'});

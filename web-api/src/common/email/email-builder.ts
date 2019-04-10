@@ -41,7 +41,7 @@ export class EmailBuilder {
     this._subject = subject;
   }
 
-  public build(templateVariables: EmailTemplateVariables): Email {
+  public build(templateVariables?: EmailTemplateVariables): Email {
     const subjectVariables = tryGetValue(templateVariables, 'subject');
     const htmlVariables = tryGetValue(templateVariables, 'html');
     const textVariables = tryGetValue(templateVariables, 'text');
