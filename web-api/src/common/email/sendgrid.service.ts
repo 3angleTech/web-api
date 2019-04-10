@@ -6,8 +6,7 @@
 
 import * as sendGrid from '@sendgrid/mail';
 import * as HttpStatus from 'http-status-codes';
-import { inject, injectable } from 'inversify';
-import { IConfigurationService } from '../configuration';
+import { injectable } from 'inversify';
 import { Logger, LogLevel } from '../logger';
 import { Email, IEmailProviderDriver } from './email.service.interface';
 
@@ -15,7 +14,6 @@ import { Email, IEmailProviderDriver } from './email.service.interface';
 export class SendGridService implements IEmailProviderDriver {
 
     constructor(
-        @inject(IConfigurationService) private configuration: IConfigurationService,
     ) {
       this.setApiKey();
     }
