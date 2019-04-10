@@ -4,6 +4,20 @@
  * Available under MIT license webApi/LICENSE
  */
 
+export interface Email {
+  to: string;
+  from: string;
+  subject: string;
+  html: string;
+  text: string;
+}
+
+export interface EmailTemplateVariables {
+  subject?: Object;
+  html?: Object;
+  text?: Object;
+}
+
 export interface EmailParams {
   to: string;
   from: string;
