@@ -7,8 +7,6 @@
 import { Container } from 'inversify';
 import { IConfigurationService } from '../configuration';
 import { EmailProvider } from './email-provider.enum';
-import { EmailTemplateService } from './email-template.service';
-import { IEmailTemplateService } from './email-template.service.interface';
 import { EmailService } from './email.service';
 import { IEmailProviderDriver, IEmailService } from './email.service.interface';
 import { MockEmailService } from './mock-email.service';
@@ -23,7 +21,6 @@ export function bindDependencies(container: Container): void {
       container.bind<IEmailProviderDriver>(IEmailProviderDriver).to(MockEmailService).inSingletonScope();
     }
 
-    container.bind<IEmailTemplateService>(IEmailTemplateService).to(EmailTemplateService).inSingletonScope();
     container.bind<IEmailService>(IEmailService).to(EmailService).inSingletonScope();
 }
 export * from './email.service.interface';
