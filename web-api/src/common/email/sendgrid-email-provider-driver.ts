@@ -8,7 +8,8 @@ import * as sendGrid from '@sendgrid/mail';
 import * as HttpStatus from 'http-status-codes';
 import { injectable } from 'inversify';
 import { Logger, LogLevel } from '../logger';
-import { Email, IEmailProviderDriver } from './email.service.interface';
+import { IEmailProviderDriver } from './email-provider-driver.interface';
+import { Email } from './email.service.interface';
 
 @injectable()
 export class SendGridEmailProviderDriver implements IEmailProviderDriver {

@@ -31,12 +31,6 @@ export interface NewAccountParameters {
 }
 
 // TODO: Add documentation
-export interface IEmailProviderDriver {
-    sendEmail(email: Email): Promise<void>;
-}
-export const IEmailProviderDriver = Symbol.for('IEmailProviderDriver');
-
-// TODO: Add documentation
 export interface IEmailService {
   sendEmail(email: Email): Promise<void>;
   sendAccountActivationEmail(parameters: ActivateAccountParameters): Promise<void>;

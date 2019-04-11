@@ -6,9 +6,10 @@
 
 import { Container } from 'inversify';
 import { IConfigurationService } from '../configuration';
+import { IEmailProviderDriver } from './email-provider-driver.interface';
 import { EmailProvider } from './email-provider.enum';
 import { EmailService } from './email.service';
-import { IEmailProviderDriver, IEmailService } from './email.service.interface';
+import { IEmailService } from './email.service.interface';
 import { MockEmailProviderDriver } from './mock-email-provider-driver';
 import { SendGridEmailProviderDriver } from './sendgrid-email-provider-driver';
 
@@ -24,3 +25,4 @@ export function bindDependencies(container: Container): void {
     container.bind<IEmailService>(IEmailService).to(EmailService).inSingletonScope();
 }
 export * from './email.service.interface';
+export * from './email-provider-driver.interface';

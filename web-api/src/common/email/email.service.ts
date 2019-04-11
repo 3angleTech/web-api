@@ -7,7 +7,8 @@
 import { inject, injectable } from 'inversify';
 import { IConfigurationService } from '../configuration';
 import { EmailBuilder } from './email-builder';
-import { ActivateAccountParameters, Email, IEmailProviderDriver, IEmailService, NewAccountParameters } from './email.service.interface';
+import { IEmailProviderDriver } from './email-provider-driver.interface';
+import { ActivateAccountParameters, Email, IEmailService, NewAccountParameters } from './email.service.interface';
 
 @injectable()
 export class EmailService implements IEmailService {
