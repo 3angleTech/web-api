@@ -6,16 +6,14 @@
 
 import { injectable } from 'inversify';
 import { Email, IEmailProviderDriver } from '.';
-import { Logger, LogLevel } from '../logger';
 
 @injectable()
-export class MockEmailService implements IEmailProviderDriver {
+export class MockEmailProviderDriver implements IEmailProviderDriver {
 
     constructor() { }
-    // TODO: Implement logic
+
     public sendEmail(email: Email): Promise<void> {
         console.log(email);
         return Promise.resolve();
     }
-
 }

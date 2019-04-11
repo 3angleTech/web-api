@@ -9,16 +9,16 @@ import { IConfigurationService } from '../configuration';
 import { EmailProvider } from './email-provider.enum';
 import { EmailService } from './email.service';
 import { IEmailProviderDriver, IEmailService } from './email.service.interface';
-import { MockEmailService } from './mock-email.service';
-import { SendGridService } from './sendgrid.service';
+import { MockEmailProviderDriver } from './mock-email-provider-driver';
+import { SendGridEmailProviderDriver } from './sendgrid-email-provider-driver';
 
 export function bindDependencies(container: Container): void {
     const configurationService = container.get<IConfigurationService>(IConfigurationService);
     const emailProvider = configurationService.getEmailProvider();
     if (emailProvider === EmailProvider.SendGrid) {
-      container.bind<IEmailProviderDriver>(IEmailProviderDriver).to(SendGridService).inSingletonScope();
+      container.bind<IEmailProviderDriver>(IEmailProviderDriver).to(SendGridEmailProviderDriver).inSingletonScope();
     } else {
-      container.bind<IEmailProviderDriver>(IEmailProviderDriver).to(MockEmailService).inSingletonScope();
+      container.bind<IEmailProviderDriver>(IEmailProviderDriver).to(MockEmailProviderDriver).inSingletonScope();
     }
 
     container.bind<IEmailService>(IEmailService).to(EmailService).inSingletonScope();

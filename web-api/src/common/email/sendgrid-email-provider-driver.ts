@@ -11,7 +11,7 @@ import { Logger, LogLevel } from '../logger';
 import { Email, IEmailProviderDriver } from './email.service.interface';
 
 @injectable()
-export class SendGridService implements IEmailProviderDriver {
+export class SendGridEmailProviderDriver implements IEmailProviderDriver {
 
     constructor(
     ) {
