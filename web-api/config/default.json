@@ -23,6 +23,17 @@
       "refreshTokenExpirySeconds": 172800
     }]
   },
+  "email": {
+    "provider": "SendGrid",
+    "sender": "contact+opensource@3angle.tech",
+    "templateCollection": {
+      "accountActivation": {
+        "subject": "Account created",
+        "html": "<p>Here is your activation token: <strong> {{activationToken}} </strong></p>",
+        "text": "Here is your activation token: {{activationToken}}"
+      }
+    }
+  },
   "emailProvider": "SendGrid",
   "emailTemplates": {
     "activation": {

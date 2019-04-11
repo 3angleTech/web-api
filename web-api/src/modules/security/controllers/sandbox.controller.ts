@@ -6,6 +6,7 @@
 
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
+import { IConfigurationService } from '../../../common/configuration';
 import { ActivateAccountParameters, Email, IEmailService } from '../../../common/email';
 import { AppRequest, AppResponse } from '../../../core';
 
@@ -19,6 +20,7 @@ export const ISandboxController = Symbol.for('ISandboxController');
 export class SandboxController implements ISandboxController {
   constructor(
     @inject(IEmailService) private emailService: IEmailService,
+    @inject(IConfigurationService) private configuration: IConfigurationService,
   ) {
     this.sendMail = this.sendMail.bind(this);
     this.sendActivationMail = this.sendActivationMail.bind(this);
@@ -42,7 +44,7 @@ export class SandboxController implements ISandboxController {
   public sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void {
     const params: ActivateAccountParameters = {
       to: 'catalin@3angle.tech',
-      from: 'webFrame@3angle.tech',
+      from: this.configuration.getEmailConfig().sender,
       token: '12432432432',
     };
 

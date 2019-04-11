@@ -21,13 +21,19 @@ export interface OAuthConfiguration {
   clients: OAuthClient[];
 }
 
+export interface EmailConfiguration {
+  provider: string;
+  sender: string;
+  templateCollection: EmailTemplateCollection;
+}
+
 export interface EmailTemplate {
   html: string;
   text: string;
   subject: string;
 }
-export interface EmailTemplates {
-  activation: EmailTemplate;
+export interface EmailTemplateCollection {
+  accountActivation: EmailTemplate;
 }
 
 export interface EmailConfigurationParams {
@@ -36,8 +42,6 @@ export interface EmailConfigurationParams {
 
 export interface IConfigurationService {
   getOAuthConfig(): OAuthConfiguration;
-  getEmailProvider(): EmailProvider;
-  getEmailTemplates(): EmailTemplates;
-  getEmailConfigurationParams(): EmailConfigurationParams;
+  getEmailConfig(): EmailConfiguration;
 }
 export const IConfigurationService = Symbol.for('IConfigurationService');

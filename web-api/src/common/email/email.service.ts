@@ -24,7 +24,7 @@ export class EmailService implements IEmailService {
     }
 
     public async sendAccountActivationEmail(parameters: ActivateAccountParameters): Promise<void> {
-        const template = this.configuration.getEmailTemplates()['activation'];
+        const template = this.configuration.getEmailConfig().templateCollection.accountActivation;
 
         const emailBuilder = new EmailBuilder();
         emailBuilder.to = parameters.to;

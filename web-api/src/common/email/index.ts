@@ -15,7 +15,7 @@ import { SendGridEmailProviderDriver } from './sendgrid-email-provider-driver';
 
 export function bindDependencies(container: Container): void {
     const configurationService = container.get<IConfigurationService>(IConfigurationService);
-    const emailProvider = configurationService.getEmailProvider();
+    const emailProvider = configurationService.getEmailConfig().provider;
     if (emailProvider === EmailProvider.SendGrid) {
       container.bind<IEmailProviderDriver>(IEmailProviderDriver).to(SendGridEmailProviderDriver).inSingletonScope();
     } else {
