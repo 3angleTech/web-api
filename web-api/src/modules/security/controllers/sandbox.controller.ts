@@ -11,7 +11,6 @@ import { ActivateAccountParameters, Email, IEmailService } from '../../../common
 import { AppRequest, AppResponse } from '../../../core';
 
 export interface ISandboxController {
-  sendMail(req: AppRequest, res: AppResponse, next: NextFunction): void;
   sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void;
 }
 export const ISandboxController = Symbol.for('ISandboxController');
@@ -22,33 +21,19 @@ export class SandboxController implements ISandboxController {
     @inject(IEmailService) private emailService: IEmailService,
     @inject(IConfigurationService) private configuration: IConfigurationService,
   ) {
-    this.sendMail = this.sendMail.bind(this);
     this.sendActivationMail = this.sendActivationMail.bind(this);
   }
 
-  public sendMail(req: AppRequest, res: AppResponse, next: NextFunction): void {
-    const params: Email = {
-      to: 'catalin@3angle.tech',
-      from: 'webFrame@3angle.tech',
-      subject: 'WebFrame test mail',
-      html: 'test mail <strong>strong</strong>',
-      text: 'text mail catalin@3angle.tech',
-    };
-    console.log(params);
-
-    this.emailService.sendEmail(params).then(() => {
-      res.json({message: 'Mail was sent succesfully.'});
-    });
-  }
-
   public sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void {
-    const params: ActivateAccountParameters = {
-      to: 'catalin@3angle.tech',
-      from: this.configuration.getEmailConfig().sender,
-      token: '12432432432',
+    const to = 'catalin@3angle.tech';
+    const from = this.configuration.getEmailConfig().sender;
+
+    const templateParameters: ActivateAccountParameters = {
+        name: 'Catalin',
+        activationLink: '912432432432',
     };
 
-    this.emailService.sendAccountActivationEmail(params).then(() => {
+    this.emailService.sendAccountActivationEmail(to, from, templateParameters).then(() => {
       res.json({message: 'Mail was sent succesfully.'});
     });
   }

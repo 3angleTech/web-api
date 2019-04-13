@@ -7,9 +7,8 @@
 export interface Email {
   to: string;
   from: string;
-  subject: string;
-  html: string;
-  text: string;
+  templateId: string;
+  dynamic_template_data: Object;
 }
 
 export interface EmailTemplateVariables {
@@ -19,21 +18,18 @@ export interface EmailTemplateVariables {
 }
 
 export interface ActivateAccountParameters {
-  to: string;
-  from: string;
-  token: string;
+  name: string;
+  activationLink: string;
 }
 
 export interface NewAccountParameters {
-  to: string;
-  from: string;
   username: string;
 }
 
 // TODO: Add documentation
 export interface IEmailService {
   sendEmail(email: Email): Promise<void>;
-  sendAccountActivationEmail(parameters: ActivateAccountParameters): Promise<void>;
-  sendNewAccountEmail(parameters: NewAccountParameters): Promise<void>;
+  sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void>;
+  sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<void>;
 }
 export const IEmailService = Symbol.for('IEmailService');

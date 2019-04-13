@@ -23,25 +23,26 @@ export class SendGridEmailProviderDriver implements IEmailProviderDriver {
         sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
     }
 
+    // tslint:disable-next-line:max-func-body-length
     public async sendEmail(email: Email): Promise<void> {
-        const mailData = {
-            to: email.to,
-            from: email.from,
-            subject: email.subject,
-            text: email.text,
-            html: email.html,
-        };
-        const response = await sendGrid.send(mailData);
+      const message = {
+        to: email.to,
+        from: email.from,
+        templateId: email.templateId,
+        dynamic_template_data: email.dynamic_template_data,
+      };
 
-        const statusCode = response[0].statusCode;
-        if (statusCode === HttpStatus.ACCEPTED) {
-            return;
-        }
+      const response = await sendGrid.send(message);
 
-        Logger.getInstance().log(LogLevel.Error, `Error sending e-mail to ${email.to}`, {
-            sendGridResponse: response[0],
-            email: email,
-        });
-        throw new Error(`Error Sending Email to ${email.to}`);
+      const statusCode = response[0].statusCode;
+      if (statusCode === HttpStatus.ACCEPTED) {
+          return;
+      }
+
+      Logger.getInstance().log(LogLevel.Error, `Error sending e-mail to ${email.to}`, {
+          sendGridResponse: response[0],
+          email: email,
+      });
+      throw new Error(`Error Sending Email to ${email.to}`);
     }
 }

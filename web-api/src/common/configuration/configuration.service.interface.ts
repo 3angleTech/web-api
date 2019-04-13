@@ -24,16 +24,11 @@ export interface OAuthConfiguration {
 export interface EmailConfiguration {
   provider: string;
   sender: string;
-  templateCollection: EmailTemplateCollection;
+  templateIds: EmailTemplateIds;
 }
 
-export interface EmailTemplate {
-  html: string;
-  text: string;
-  subject: string;
-}
-export interface EmailTemplateCollection {
-  accountActivation: EmailTemplate;
+export interface EmailTemplateIds {
+  accountActivation: string;
 }
 
 export interface EmailConfigurationParams {

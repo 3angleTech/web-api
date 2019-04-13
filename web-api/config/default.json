@@ -26,23 +26,8 @@
   "email": {
     "provider": "SendGrid",
     "sender": "contact+opensource@3angle.tech",
-    "templateCollection": {
-      "accountActivation": {
-        "subject": "Account created",
-        "html": "<p>Here is your activation token: <strong> {{activationToken}} </strong></p>",
-        "text": "Here is your activation token: {{activationToken}}"
-      }
+    "templateIds": {
+      "accountActivation": "d-a3ce0bc076634d3dbcf47dac71bdb1cb"
     }
-  },
-  "emailProvider": "SendGrid",
-  "emailTemplates": {
-    "activation": {
-      "subject": "Account created",
-      "html": "<p>Here is your activation token: <strong> {{activationToken}} </strong></p>",
-      "text": "Here is your activation token: {{activationToken}}"
-    }
-  },
-  "emailParams": {
-    "from": "contact+opensource@3angle.tech"
   }
 }

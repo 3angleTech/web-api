@@ -6,7 +6,6 @@
 
 import { inject, injectable } from 'inversify';
 import { IConfigurationService } from '../configuration';
-import { EmailBuilder } from './email-builder';
 import { IEmailProviderDriver } from './email-provider-driver.interface';
 import { ActivateAccountParameters, Email, IEmailService, NewAccountParameters } from './email.service.interface';
 
@@ -23,31 +22,21 @@ export class EmailService implements IEmailService {
       this.emailDriver.sendEmail(email);
     }
 
-    public async sendAccountActivationEmail(parameters: ActivateAccountParameters): Promise<void> {
-        const template = this.configuration.getEmailConfig().templateCollection.accountActivation;
+    public async sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void> {
+        const templateId = this.configuration.getEmailConfig().templateIds.accountActivation;
 
-        const emailBuilder = new EmailBuilder();
-        emailBuilder.to = parameters.to;
-        emailBuilder.from = parameters.from;
-
-        emailBuilder.subject = template.subject;
-        emailBuilder.html = template.html;
-        emailBuilder.text = template.text;
-
-        const templateVariables = {
-          activationToken: parameters.token,
+        const email: Email = {
+          to: to,
+          from: from,
+          templateId: templateId,
+          dynamic_template_data: templateParameters,
         };
-
-        const email = emailBuilder.build({
-          html: templateVariables,
-          text: templateVariables,
-        });
 
         await this.sendEmail(email);
         return Promise.resolve();
     }
 
-    public async sendNewAccountEmail(parameters: NewAccountParameters): Promise<void> {
+    public async sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<void> {
         // TODO: Pass parameters such as username in e-mail
         await this.sendEmail(null);
         return Promise.resolve();
