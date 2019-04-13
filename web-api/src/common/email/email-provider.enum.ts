@@ -5,5 +5,5 @@
  */
 export enum EmailProvider {
     SendGrid = 'SendGrid',
-    Mockup = 'Mockup',
+    Mock = 'Mock',
 }
