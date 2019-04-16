@@ -23,7 +23,7 @@ export interface OAuthConfiguration {
 
 export interface EmailConfiguration {
   provider: string;
-  from: string;
+  configuration: EmailConfigurationParams;
   templateIds: EmailTemplateIds;
 }
 
