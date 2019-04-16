@@ -23,7 +23,7 @@ export class SendGridEmailProviderDriver implements IEmailProviderDriver {
     sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
   }
 
-  public async sendEmail(email: Email): Promise<string> {
+  public async sendEmail(email: Email): Promise<void> {
     const message = {
       to: email.to,
       from: email.from,
@@ -36,10 +36,10 @@ export class SendGridEmailProviderDriver implements IEmailProviderDriver {
       const statusCode = response[0].statusCode;
       switch (statusCode) {
         case HttpStatus.ACCEPTED:
-          return Promise.resolve(null);
+          return;
       }
     } catch (e) {
-      return Promise.reject(e);
+      throw e;
     }
   }
 }

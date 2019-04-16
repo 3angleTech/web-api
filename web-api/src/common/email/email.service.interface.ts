@@ -28,8 +28,8 @@ export interface NewAccountParameters {
 
 // TODO: Add documentation
 export interface IEmailService {
-  sendEmail(email: Email): Promise<string>;
-  sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<string>;
-  sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<string>;
+  sendEmail(email: Email): Promise<void>;
+  sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void>;
+  sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<void>;
 }
 export const IEmailService = Symbol.for('IEmailService');

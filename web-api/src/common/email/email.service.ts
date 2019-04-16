@@ -18,16 +18,15 @@ export class EmailService implements IEmailService {
   ) {
   }
 
-  public async sendEmail(email: Email): Promise<string> {
+  public async sendEmail(email: Email): Promise<void> {
     try {
       await this.emailDriver.sendEmail(email);
     } catch (e) {
-      return Promise.reject(e);
+      throw e;
     }
-    return Promise.resolve(null);
   }
 
-  public async sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<string> {
+  public async sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void> {
     const templateId = this.configuration.getEmailConfig().templateIds.accountActivation;
 
     const email: Email = {
@@ -40,18 +39,16 @@ export class EmailService implements IEmailService {
     try {
       await this.sendEmail(email);
     } catch (e) {
-      return Promise.reject(e);
+      throw e;
     }
-    return Promise.resolve(null);
   }
 
-  public async sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<string> {
+  public async sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<void> {
     // TODO: Pass parameters such as username in e-mail
     try {
       await this.sendEmail(null);
     } catch (e) {
-      return Promise.reject(e);
+      throw e;
     }
-    return Promise.resolve(null);
   }
 }
