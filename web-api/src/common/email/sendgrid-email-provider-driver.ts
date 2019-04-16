@@ -14,35 +14,32 @@ import { Email } from './email.service.interface';
 @injectable()
 export class SendGridEmailProviderDriver implements IEmailProviderDriver {
 
-    constructor(
-    ) {
-      this.setApiKey();
-    }
+  constructor(
+  ) {
+    this.setApiKey();
+  }
 
-    private setApiKey(): void {
-        sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
-    }
+  private setApiKey(): void {
+    sendGrid.setApiKey(process.env.SENDGRID_API_KEY);
+  }
 
-    // tslint:disable-next-line:max-func-body-length
-    public async sendEmail(email: Email): Promise<void> {
-      const message = {
-        to: email.to,
-        from: email.from,
-        templateId: email.templateId,
-        dynamic_template_data: email.dynamic_template_data,
-      };
+  public async sendEmail(email: Email): Promise<string> {
+    const message = {
+      to: email.to,
+      from: email.from,
+      templateId: email.templateId,
+      dynamic_template_data: email.dynamic_template_data,
+    };
 
+    try {
       const response = await sendGrid.send(message);
-
       const statusCode = response[0].statusCode;
-      if (statusCode === HttpStatus.ACCEPTED) {
-          return;
+      switch (statusCode) {
+        case HttpStatus.ACCEPTED:
+          return Promise.resolve('');
       }
-
-      Logger.getInstance().log(LogLevel.Error, `Error sending e-mail to ${email.to}`, {
-          sendGridResponse: response[0],
-          email: email,
-      });
-      throw new Error(`Error Sending Email to ${email.to}`);
+    } catch (e) {
+      return Promise.reject(e);
     }
+  }
 }

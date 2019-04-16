@@ -12,33 +12,46 @@ import { ActivateAccountParameters, Email, IEmailService, NewAccountParameters }
 @injectable()
 export class EmailService implements IEmailService {
 
-    constructor(
-        @inject(IEmailProviderDriver) private emailDriver: IEmailProviderDriver,
-        @inject(IConfigurationService) private configuration: IConfigurationService,
-    ) {
+  constructor(
+    @inject(IEmailProviderDriver) private emailDriver: IEmailProviderDriver,
+    @inject(IConfigurationService) private configuration: IConfigurationService,
+  ) {
+  }
+
+  public async sendEmail(email: Email): Promise<string> {
+    try {
+      await this.emailDriver.sendEmail(email);
+    } catch (e) {
+      return Promise.reject(e);
     }
+    return Promise.resolve('');
+  }
 
-    public async sendEmail(email: Email): Promise<void> {
-      this.emailDriver.sendEmail(email);
+  public async sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<string> {
+    const templateId = this.configuration.getEmailConfig().templateIds.accountActivation;
+
+    const email: Email = {
+      to: to,
+      from: from,
+      templateId: templateId,
+      dynamic_template_data: templateParameters,
+    };
+
+    try {
+      await this.sendEmail(email);
+    } catch (e) {
+      return Promise.reject(e);
     }
+    return Promise.resolve('');
+  }
 
-    public async sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void> {
-        const templateId = this.configuration.getEmailConfig().templateIds.accountActivation;
-
-        const email: Email = {
-          to: to,
-          from: from,
-          templateId: templateId,
-          dynamic_template_data: templateParameters,
-        };
-
-        await this.sendEmail(email);
-        return Promise.resolve();
+  public async sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<string> {
+    // TODO: Pass parameters such as username in e-mail
+    try {
+      await this.sendEmail(null);
+    } catch (e) {
+      return Promise.reject(e);
     }
-
-    public async sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<void> {
-        // TODO: Pass parameters such as username in e-mail
-        await this.sendEmail(null);
-        return Promise.resolve();
-    }
+    return Promise.resolve('');
+  }
 }

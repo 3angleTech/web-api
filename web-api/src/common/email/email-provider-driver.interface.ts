@@ -8,6 +8,6 @@ import { Email } from './email.service.interface';
 
 // TODO: Add documentation
 export interface IEmailProviderDriver {
-  sendEmail(email: Email): Promise<void>;
+  sendEmail(email: Email): Promise<string>;
 }
 export const IEmailProviderDriver = Symbol.for('IEmailProviderDriver');

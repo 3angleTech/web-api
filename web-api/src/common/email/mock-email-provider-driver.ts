@@ -12,8 +12,8 @@ export class MockEmailProviderDriver implements IEmailProviderDriver {
 
     constructor() { }
 
-    public sendEmail(email: Email): Promise<void> {
+    public sendEmail(email: Email): Promise<string> {
         console.log(email);
-        return Promise.resolve();
+        return Promise.resolve('');
     }
 }
