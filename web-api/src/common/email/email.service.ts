@@ -24,7 +24,7 @@ export class EmailService implements IEmailService {
     } catch (e) {
       return Promise.reject(e);
     }
-    return Promise.resolve('');
+    return Promise.resolve(null);
   }
 
   public async sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<string> {
@@ -42,7 +42,7 @@ export class EmailService implements IEmailService {
     } catch (e) {
       return Promise.reject(e);
     }
-    return Promise.resolve('');
+    return Promise.resolve(null);
   }
 
   public async sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<string> {
@@ -52,6 +52,6 @@ export class EmailService implements IEmailService {
     } catch (e) {
       return Promise.reject(e);
     }
-    return Promise.resolve('');
+    return Promise.resolve(null);
   }
 }

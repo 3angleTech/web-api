@@ -36,7 +36,7 @@ export class SendGridEmailProviderDriver implements IEmailProviderDriver {
       const statusCode = response[0].statusCode;
       switch (statusCode) {
         case HttpStatus.ACCEPTED:
-          return Promise.resolve('');
+          return Promise.resolve(null);
       }
     } catch (e) {
       return Promise.reject(e);
