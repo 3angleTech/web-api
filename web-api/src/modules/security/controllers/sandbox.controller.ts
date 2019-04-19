@@ -34,9 +34,8 @@ export class SandboxController implements ISandboxController {
   }
 
   public sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void {
-    const to = 'gabi@3angle.tech';
-    const from = this.configuration.getEmailConfig().configuration.from;
-    console.log(`From ${from}`);
+    const to = 'catalin@3angle.tech';
+    const from = this.configuration.getEmailConfig().from;
 
     const templateParameters: ActivateAccountParameters = {
       name: 'Catalin',

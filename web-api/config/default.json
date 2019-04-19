@@ -25,9 +25,7 @@
   },
   "email": {
     "provider": "SendGrid",
-    "configuration": {
-      "from": "no-reply@3angle.tech"
-    },
+    "from": "no-reply@3angle.tech",
     "templateIds": {
       "accountActivation": "d-a3ce0bc076634d3dbcf47dac71bdb1cb"
     }
