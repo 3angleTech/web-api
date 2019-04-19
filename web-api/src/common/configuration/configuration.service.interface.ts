@@ -55,6 +55,11 @@ export interface EmailConfigurationParams {
 export interface IConfigurationService {
 
   /**
+   * Provides the base URL of the Opensource client
+   */
+  getOpensourceClientBaseUrl(): string;
+
+  /**
    * Provides configuration data for OAuth.
    */
   getOAuthConfig(): OAuthConfiguration;

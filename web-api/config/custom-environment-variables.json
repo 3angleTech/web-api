@@ -1,4 +1,5 @@
 {
+  "opensourceClientBaseUrl": "OPENSOURCE_CLIENT_BASE_URL",
   "db-connection": {
     "username": "DB_USER",
     "password": "DB_PASSWORD",

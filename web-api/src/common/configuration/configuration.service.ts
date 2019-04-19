@@ -12,6 +12,10 @@ import { EmailConfiguration, IConfigurationService, OAuthConfiguration } from '.
 @injectable()
 export class ConfigurationService implements IConfigurationService {
 
+  public getOpensourceClientBaseUrl(): string {
+    return config.get<string>('opensourceClientBaseUrl');
+  }
+
   public getOAuthConfig(): OAuthConfiguration {
     return config.get<OAuthConfiguration>('oauth');
   }
