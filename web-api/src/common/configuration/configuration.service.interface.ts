@@ -5,7 +5,7 @@
  */
 
 /**
- * Provides OAuth client credentials and token expiration times
+ * Provides OAuth client credentials and token expiration times.
  */
 export interface OAuthClient {
   id: string;
@@ -16,7 +16,7 @@ export interface OAuthClient {
 }
 
 /**
- * Provides configuration data for OAuth
+ * Provides configuration data for OAuth.
  */
 export interface OAuthConfiguration {
   issuer: string;
@@ -27,7 +27,7 @@ export interface OAuthConfiguration {
 }
 
 /**
- * Provides email provider, configuration data and template ids
+ * Provides email provider, configuration data and template ids.
  */
 export interface EmailConfiguration {
   provider: string;
@@ -36,31 +36,31 @@ export interface EmailConfiguration {
 }
 
 /**
- * Provides ids of email templates
+ * Provides ids of email templates.
  */
 export interface EmailTemplateIds {
   accountActivation: string;
 }
 
 /**
- * Provides configuration params for emails
+ * Provides configuration params for emails.
  */
 export interface EmailConfigurationParams {
   from: string;
 }
 
 /**
- * Provides OAuth and email configuration data
+ * Provides OAuth and email configuration data.
  */
 export interface IConfigurationService {
 
   /**
-   * Provides configuration data for OAuth
+   * Provides configuration data for OAuth.
    */
   getOAuthConfig(): OAuthConfiguration;
 
   /**
-   * Provides email provider, configuration data and template ids
+   * Provides email configuration data.
    */
   getEmailConfig(): EmailConfiguration;
 }

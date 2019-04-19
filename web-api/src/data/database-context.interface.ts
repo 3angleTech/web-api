@@ -14,12 +14,12 @@ export enum DatabaseModel {
 }
 
 /**
- * Provides database context to access models
+ * Provides database context to access models.
  */
 export interface IDatabaseContext {
   /**
-   * Provides the sequelize model for a specific table
-   * @param model The name of the table for the desired sequelize model
+   * Provides the sequelize model for a specific table.
+   * @param model The name of the table for the desired sequelize model.
    */
   getModel(model: DatabaseModel): SequelizeModel<any, any>;
 }

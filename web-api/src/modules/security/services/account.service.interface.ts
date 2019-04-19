@@ -12,23 +12,24 @@ export interface Credentials {
 }
 
 /**
- * Handles action related to users' account
+ * Handles action related to users' accounts.
  */
 export interface IAccountService {
   /**
-   * Verifies credentials and returns the user if found
-   * @param credentials User's credentials
+   * Verifies credentials and returns the user if found.
+   * @param credentials User's credentials.
    */
   verify(credentials: Credentials): Promise<User>;
 
   /**
-   * Looks for a user based on it's it and returns it if found
-   * @param userId User's id
+   * Looks for a user based on it's id and returns it if found.
+   * @param userId User's id.
    */
   find(userId: number): Promise<User>;
 
   /**
-   * Activates an user's account based on the provided token
+   * Activates an user's account based on the provided token.
+   * @param token Activation token.
    */
   activate(token: string): Promise<string>;
 }

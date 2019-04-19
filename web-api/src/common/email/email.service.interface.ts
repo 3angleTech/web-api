@@ -5,7 +5,7 @@
  */
 
 /**
-* Provides generic email template parameters
+* Provides generic email template parameters.
 */
 export interface Email {
   to: string;
@@ -15,7 +15,7 @@ export interface Email {
 }
 
 /**
- * Provides parameters for account activation emails
+ * Provides parameters for account activation emails.
  */
 export interface ActivateAccountParameters {
   name: string;
@@ -23,39 +23,36 @@ export interface ActivateAccountParameters {
 }
 
 /**
- * Provides parameters for new account emails
+ * Provides parameters for new account emails.
  */
 export interface NewAccountParameters {
   username: string;
 }
 
 /**
- * Provides the email service used for various actions such as activation, sign up, or password reset
+ * Provides the email service used for actions like activation, sign up, or password reset.
  */
 export interface IEmailService {
 
   /**
-   * Sends a generic email message
-   *
-   * @param email Contains email fields, template id and its variables
+   * Sends a generic email message.
+   * @param email The target email.
    */
   sendEmail(email: Email): Promise<void>;
 
   /**
-   * Sends an account activation email
-   *
-   * @param to Email recipient
-   * @param from Email sender
-   * @param templateParameters Parameters to be replaced in the template
+   * Sends an account activation email.
+   * @param to Email recipient.
+   * @param from Email sender.
+   * @param templateParameters Parameters to be replaced in the template.
    */
   sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void>;
 
   /**
-   * Sends a new account email
-   *
-   * @param to Email recipient
-   * @param from Email sender
-   * @param templateParameters Parameters to be replaced in the template
+   * Sends a new account email.
+   * @param to Email recipient.
+   * @param from Email sender.
+   * @param templateParameters Parameters to be replaced in the template.
    */
   sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<void>;
 }

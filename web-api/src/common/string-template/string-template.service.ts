@@ -9,7 +9,7 @@ import { forEach, map, union } from 'lodash';
 import { isNil } from '../utils';
 
 /**
- * Replaces variables of a template
+ * Replaces variables of a template.
  */
 export interface IStringTemplateService {
   /**

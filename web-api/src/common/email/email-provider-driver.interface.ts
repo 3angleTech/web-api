@@ -7,14 +7,13 @@
 import { Email } from './email.service.interface';
 
 /**
- * Provides the driver for the e-mail provider
+ * Provides the driver for the e-mail provider.
  */
 export interface IEmailProviderDriver {
 
   /**
-   * Sends an email message based on a template
-   *
-   * @param email Contains email fields, template id and its variables
+   * Sends the email.
+   * @param email The target email.
    */
   sendEmail(email: Email): Promise<void>;
 }

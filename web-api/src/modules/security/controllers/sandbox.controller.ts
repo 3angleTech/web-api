@@ -11,14 +11,14 @@ import { ActivateAccountParameters, Email, IEmailService } from '../../../common
 import { AppRequest, AppResponse } from '../../../core';
 
 /**
- * Allows testing email service by sending sample emails
+ * Allows testing email service by sending sample emails.
  */
 export interface ISandboxController {
   /**
-   * Sends a sample activation email
-   * @param req Request object data
-   * @param res Response object data
-   * @param next Middleware function to be called
+   * Sends a sample activation email.
+   * @param req Request object data.
+   * @param res Response object data.
+   * @param next Middleware function to be called.
    */
   sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void;
 }
