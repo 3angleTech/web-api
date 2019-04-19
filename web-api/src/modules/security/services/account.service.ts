@@ -72,7 +72,6 @@ export class AccountService implements IAccountService {
     if (isNil(affectedRows)) {
       throw new Error(`User not found (ID = ${jwtToken.userId})`);
     }
-    return Promise.resolve();
   }
 
   private async generateAccessToken(user: User): Promise<string> {
