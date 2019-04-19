@@ -31,6 +31,6 @@ export interface IAccountService {
    * Activates an user's account based on the provided token.
    * @param token Activation token.
    */
-  activate(token: string): Promise<string>;
+  activate(token: string): Promise<void>;
 }
 export const IAccountService = Symbol.for('IAccountService');
