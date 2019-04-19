@@ -4,6 +4,9 @@
  * Available under MIT license webApi/LICENSE
  */
 
+/**
+* Provides generic email template parameters
+*/
 export interface Email {
   to: string;
   from: string;
@@ -11,25 +14,49 @@ export interface Email {
   dynamic_template_data: Object;
 }
 
-export interface EmailTemplateVariables {
-  subject?: Object;
-  html?: Object;
-  text?: Object;
-}
-
+/**
+ * Provides parameters for account activation emails
+ */
 export interface ActivateAccountParameters {
   name: string;
   activationLink: string;
 }
 
+/**
+ * Provides parameters for new account emails
+ */
 export interface NewAccountParameters {
   username: string;
 }
 
-// TODO: Add documentation
+/**
+ * Provides the email service used for various actions such as activation, sign up, or password reset
+ */
 export interface IEmailService {
+
+  /**
+   * Sends a generic email message
+   *
+   * @param email Contains email fields, template id and its variables
+   */
   sendEmail(email: Email): Promise<void>;
+
+  /**
+   * Sends an account activation email
+   *
+   * @param to Email recipient
+   * @param from Email sender
+   * @param templateParameters Parameters to be replaced in the template
+   */
   sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void>;
+
+  /**
+   * Sends a new account email
+   *
+   * @param to Email recipient
+   * @param from Email sender
+   * @param templateParameters Parameters to be replaced in the template
+   */
   sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<void>;
 }
 export const IEmailService = Symbol.for('IEmailService');

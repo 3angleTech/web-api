@@ -6,8 +6,16 @@
 
 import { Email } from './email.service.interface';
 
-// TODO: Add documentation
+/**
+ * Provides the driver for the e-mail provider
+ */
 export interface IEmailProviderDriver {
+
+  /**
+   * Sends an email message based on a template
+   *
+   * @param email Contains email fields, template id and its variables
+   */
   sendEmail(email: Email): Promise<void>;
 }
 export const IEmailProviderDriver = Symbol.for('IEmailProviderDriver');

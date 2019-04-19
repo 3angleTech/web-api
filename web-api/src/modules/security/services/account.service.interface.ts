@@ -11,9 +11,25 @@ export interface Credentials {
   password: string;
 }
 
+/**
+ * Handles action related to users' account
+ */
 export interface IAccountService {
+  /**
+   * Verifies credentials and returns the user if found
+   * @param credentials User's credentials
+   */
   verify(credentials: Credentials): Promise<User>;
+
+  /**
+   * Looks for a user based on it's it and returns it if found
+   * @param userId User's id
+   */
   find(userId: number): Promise<User>;
+
+  /**
+   * Activates an user's account based on the provided token
+   */
   activate(token: string): Promise<string>;
 }
 export const IAccountService = Symbol.for('IAccountService');

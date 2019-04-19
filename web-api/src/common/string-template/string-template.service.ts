@@ -8,6 +8,9 @@ import { injectable } from 'inversify';
 import { forEach, map, union } from 'lodash';
 import { isNil } from '../utils';
 
+/**
+ * Replaces variables of a template
+ */
 export interface IStringTemplateService {
   /**
    * Interpolate a string template with the parameters passed as input.

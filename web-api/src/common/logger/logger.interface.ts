@@ -11,6 +11,9 @@ export enum LogLevel {
   Error,
 }
 
+/**
+ * Allows logging messages with different debugging levels
+ */
 export interface ILogger {
   /**
    * Method that adds a log statement

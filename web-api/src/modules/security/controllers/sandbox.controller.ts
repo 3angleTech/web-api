@@ -10,7 +10,16 @@ import { IConfigurationService } from '../../../common/configuration';
 import { ActivateAccountParameters, Email, IEmailService } from '../../../common/email';
 import { AppRequest, AppResponse } from '../../../core';
 
+/**
+ * Allows testing email service by sending sample emails
+ */
 export interface ISandboxController {
+  /**
+   * Sends a sample activation email
+   * @param req Request object data
+   * @param res Response object data
+   * @param next Middleware function to be called
+   */
   sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void;
 }
 export const ISandboxController = Symbol.for('ISandboxController');
