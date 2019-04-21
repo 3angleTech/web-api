@@ -34,7 +34,7 @@ export interface IAccountService {
   activate(token: string): Promise<void>;
 
   /**
-   * Generates an access token for a user
+   * Generates an activation token for activating a user's account.
    * @param user The user object
    */
   generateActivationToken(user: User): Promise<string>;

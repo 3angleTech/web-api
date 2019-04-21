@@ -79,7 +79,7 @@ export class AccountService implements IAccountService {
       userId: user.id,
       clientId: this.oauthConfig.clients[0].id,
       clientSecret: this.oauthConfig.clients[0].secret,
-      expirySeconds: this.oauthConfig.clients[0].accessTokenExpirySeconds,
+      expirySeconds: this.oauthConfig.clients[0].activationTokenExpirySeconds,
       grants: this.oauthConfig.clients[0].grants,
     });
   }

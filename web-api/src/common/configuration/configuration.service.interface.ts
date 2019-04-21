@@ -13,6 +13,7 @@ export interface OAuthClient {
   grants: string[];
   accessTokenExpirySeconds: number;
   refreshTokenExpirySeconds: number;
+  activationTokenExpirySeconds: number;
 }
 
 /**
