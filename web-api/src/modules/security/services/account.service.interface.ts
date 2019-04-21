@@ -37,6 +37,6 @@ export interface IAccountService {
    * Generates an access token for a user
    * @param user The user object
    */
-  generateAccessToken(user: User): Promise<string>;
+  generateActivationToken(user: User): Promise<string>;
 }
 export const IAccountService = Symbol.for('IAccountService');

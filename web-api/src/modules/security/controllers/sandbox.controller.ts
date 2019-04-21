@@ -43,7 +43,7 @@ export class SandboxController implements ISandboxController {
     if (isNil(user)) {
       throw new Error('User not found');
     }
-    const token = await this.accountService.generateAccessToken(user);
+    const token = await this.accountService.generateActivationToken(user);
     const to = user.email;
     const from = this.configuration.getEmailConfig().from;
     const activationLink = `${this.configuration.getOpensourceClientBaseUrl()}/account/activate?token=${token}`;
