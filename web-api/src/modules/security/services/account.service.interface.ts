@@ -32,5 +32,11 @@ export interface IAccountService {
    * @param token Activation token.
    */
   activate(token: string): Promise<void>;
+
+  /**
+   * Generates an access token for a user
+   * @param user The user object
+   */
+  generateAccessToken(user: User): Promise<string>;
 }
 export const IAccountService = Symbol.for('IAccountService');

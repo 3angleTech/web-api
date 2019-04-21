@@ -74,7 +74,7 @@ export class AccountService implements IAccountService {
     }
   }
 
-  private async generateAccessToken(user: User): Promise<string> {
+  public async generateAccessToken(user: User): Promise<string> {
     return this.tokenService.generate({
       userId: user.id,
       clientId: this.oauthConfig.clients[0].id,
