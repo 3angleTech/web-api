@@ -4,6 +4,12 @@
     "file-header": [
       true,
       "Copyright .* 2018 THREEANGLE SOFTWARE SOLUTIONS SRL"
+    ],
+    "import-blacklist": [
+      true,
+      {
+        "lodash": ["isNil"]
+      }
     ]
   }
 }

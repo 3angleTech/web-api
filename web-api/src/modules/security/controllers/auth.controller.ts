@@ -6,8 +6,8 @@
 
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
-import { isNil } from 'lodash';
 import { Logger, LogLevel } from '../../../common/logger';
+import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse } from '../../../core';
 import { IAccountService } from '../services/account.service.interface';
 import { IOAuthServer } from '../services/oauth-server.interface';
@@ -22,6 +22,7 @@ export class AuthController implements IAuthController {
   ) {
     this.token = this.token.bind(this);
     this.getAccount = this.getAccount.bind(this);
+    this.activateAccount = this.activateAccount.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -57,6 +58,14 @@ export class AuthController implements IAuthController {
     const userId = res.getUserContext().user.id;
     const user = await this.accountService.find(userId);
     res.json(user);
+  }
+
+  public async activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
+    try {
+      await this.accountService.activate(req.query.token);
+    } catch (e) {
+      Logger.getInstance().log(LogLevel.Error, `Account activation Error: ${e}`);
+    }
   }
 
   public logout(req: AppRequest, res: AppResponse, next: NextFunction): void {

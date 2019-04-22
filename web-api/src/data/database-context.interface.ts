@@ -13,7 +13,14 @@ export enum DatabaseModel {
   Users = 'Users',
 }
 
+/**
+ * Provides database context to access models.
+ */
 export interface IDatabaseContext {
+  /**
+   * Provides the sequelize model for a specific table.
+   * @param model The name of the table for the desired sequelize model.
+   */
   getModel(model: DatabaseModel): SequelizeModel<any, any>;
 }
 export const IDatabaseContext = Symbol.for('IDatabaseContext');

@@ -4,7 +4,7 @@
  * Available under MIT license webApi/LICENSE
  */
 
-import { isNil } from 'lodash';
+import { isNil } from '../utils';
 import { ILogger, LogLevel } from './logger.interface';
 
 export class Logger implements ILogger {

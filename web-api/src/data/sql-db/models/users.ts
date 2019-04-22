@@ -13,6 +13,7 @@ module.exports = (sequelize: Sequelize, DataTypes: SequelizeDataTypes) => {
     email: { type: DataTypes.STRING, field: 'email' },
     firstName: { type: DataTypes.STRING, field: 'first_name' },
     lastName: { type: DataTypes.STRING, field: 'last_name' },
+    active: { type: DataTypes.BOOLEAN, field: 'active' },
     createdBy: { type: DataTypes.INTEGER, field: 'created_by' },
     updatedBy: { type: DataTypes.INTEGER, field: 'updated_by' },
     createdAt: { type: DataTypes.DATE, field: 'created_at' },

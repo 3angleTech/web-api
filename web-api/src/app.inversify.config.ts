@@ -14,6 +14,9 @@ import { bindDependencies as bindDataDependencies } from './data';
 import { bindDependencies as bindHealthCheckDependencies } from './modules/health-check';
 import { bindDependencies as bindSecurityDependencies } from './modules/security';
 
+import { bindDependencies as bindEmailDependencies } from './common/email';
+import { bindDependencies as bindStringTemplateDependencies } from './common/string-template';
+
 const appContainer = new Container();
 
 /**
@@ -24,5 +27,7 @@ bindDataDependencies(appContainer);
 bindJsonConvertedDependencies(appContainer);
 bindHealthCheckDependencies(appContainer);
 bindSecurityDependencies(appContainer);
+bindEmailDependencies(appContainer);
+bindStringTemplateDependencies(appContainer);
 
 export { appContainer };

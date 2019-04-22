@@ -1,4 +1,5 @@
 {
+  "clientBaseUrl": "http://localhost:4200",
   "db-connection": {
     "username": "threeangle",
     "password": null,
@@ -12,17 +13,23 @@
     "algorithm": "HS256",
     "accessTokenSecret": "bsdhajg6uU%#@^UT#HJAgdsjhdgfa",
     "refreshTokenSecret": "_sdta%23gfhzHJDFAGfvgz!@rFgt65^4",
-    "clients": [
-      {
-        "id": "3at-api",
-        "secret": "5r5rd15c650f4849119eb894939d9fdaaf5f7d0e7e0f65de15b71bfa6411011y",
-        "grants": [
-          "password",
-          "refresh_token"
-        ],
-        "accessTokenExpirySeconds": 900,
-        "refreshTokenExpirySeconds": 172800
-      }
-    ]
+    "clients": [{
+      "id": "3at-api",
+      "secret": "5r5rd15c650f4849119eb894939d9fdaaf5f7d0e7e0f65de15b71bfa6411011y",
+      "grants": [
+        "password",
+        "refresh_token"
+      ],
+      "activationTokenExpirySeconds": 86400,
+      "accessTokenExpirySeconds": 900,
+      "refreshTokenExpirySeconds": 172800
+    }]
+  },
+  "email": {
+    "provider": "SendGrid",
+    "from": "no-reply@3angle.tech",
+    "templateIds": {
+      "accountActivation": "d-a3ce0bc076634d3dbcf47dac71bdb1cb"
+    }
   }
 }
