@@ -1,5 +1,5 @@
 {
-  "opensourceClientBaseUrl": "http://localhost",
+  "clientBaseUrl": "http://localhost",
   "db-connection": {
     "host": "3at-postgres"
   }

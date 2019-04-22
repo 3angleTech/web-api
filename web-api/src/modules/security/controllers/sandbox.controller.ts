@@ -46,7 +46,7 @@ export class SandboxController implements ISandboxController {
     const token = await this.accountService.generateActivationToken(user);
     const to = user.email;
     const from = this.configuration.getEmailConfig().from;
-    const activationLink = `${this.configuration.getOpensourceClientBaseUrl()}/account/activate?token=${token}`;
+    const activationLink = `${this.configuration.getClientBaseUrl()}/account/activate?token=${token}`;
 
     const templateParameters: ActivateAccountParameters = {
       name: user.firstName,

@@ -1,5 +1,5 @@
 {
-  "opensourceClientBaseUrl": "http://localhost:4200",
+  "clientBaseUrl": "http://localhost:4200",
   "db-connection": {
     "username": "threeangle",
     "password": null,

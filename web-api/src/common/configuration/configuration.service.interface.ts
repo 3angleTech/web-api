@@ -58,7 +58,7 @@ export interface IConfigurationService {
   /**
    * Provides the base URL of the Opensource client
    */
-  getOpensourceClientBaseUrl(): string;
+  getClientBaseUrl(): string;
 
   /**
    * Provides configuration data for OAuth.
