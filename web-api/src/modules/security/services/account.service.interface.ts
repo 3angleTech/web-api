@@ -38,5 +38,11 @@ export interface IAccountService {
    * @param user The user object
    */
   generateActivationToken(user: User): Promise<string>;
+
+  /**
+   * Creates an user account.
+   * @param user The user object
+   */
+  create(user: User): Promise<void>;
 }
 export const IAccountService = Symbol.for('IAccountService');
