@@ -102,6 +102,8 @@ class App {
 
     router.route('/account/me')
       .get(authenticated, this.authController.getAccount);
+    router.route('/account/sign-up')
+      .post(this.authController.createAccount);
     router.route('/account/activate')
       .get(this.authController.activateAccount);
     router.route('/send-mail')

@@ -42,6 +42,14 @@ export interface IAuthController {
   logout(req: AppRequest, res: AppResponse, next: NextFunction): void;
 
   /**
+   * Creates an user account.
+   * @param req Request object data.
+   * @param res Response object data.
+   * @param next Middleware function to be called.
+   */
+  createAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void>;
+
+  /**
    * Provides the logic for the activation of an account.
    * @param req Request object data.
    * @param res Response object data.

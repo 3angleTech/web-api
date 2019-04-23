@@ -6,8 +6,8 @@
 
 import { inject, injectable } from 'inversify';
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
-import { verify } from '../../../common/crypto';
-import { IEmailProviderDriver } from '../../../common/email';
+import { encrypt, verify } from '../../../common/crypto';
+import { ActivateAccountParameters, IEmailService } from '../../../common/email';
 import { IJsonConverterService } from '../../../common/json-converter';
 import { Logger, LogLevel } from '../../../common/logger';
 import { isNil } from '../../../common/utils';
@@ -21,7 +21,7 @@ export class AccountService implements IAccountService {
     @inject(IDatabaseContext) private dbContext: IDatabaseContext,
     @inject(IJsonConverterService) private jsonConverter: IJsonConverterService,
     @inject(IConfigurationService) private configuration: IConfigurationService,
-    @inject(IEmailProviderDriver) private emailService: IEmailProviderDriver,
+    @inject(IEmailService) private emailService: IEmailService,
     @inject(IJwtTokenService) private tokenService: IJwtTokenService,
   ) { }
 
@@ -54,6 +54,18 @@ export class AccountService implements IAccountService {
     return this.jsonConverter.deserialize(userObject, User);
   }
 
+  public async findByField(field: string, value: any): Promise<User> {
+    const userObject = await this.dbContext.getModel(DatabaseModel.Users).findOne({
+      where: {
+        [field]: value,
+      },
+    });
+    if (isNil(userObject)) {
+      return null;
+    }
+    return this.jsonConverter.deserialize(userObject, User);
+  }
+
   public async activate(token: string): Promise<void> {
     const jwtToken = await this.tokenService.verify(token, this.configuration.getOAuthConfig().clients[0].secret);
     if (isNil(jwtToken.userId)) {
@@ -82,6 +94,56 @@ export class AccountService implements IAccountService {
       expirySeconds: this.oauthConfig.clients[0].activationTokenExpirySeconds,
       grants: this.oauthConfig.clients[0].grants,
     });
+  }
+
+  public async create(user: User): Promise<void> {
+    if (isNil(user)) {
+      throw new Error('No user data sent');
+    }
+    const userExists = await this.userExists(user);
+    if (userExists) {
+      throw new Error('An user account with the same username or email already exists');
+    }
+    user.password = encrypt(user.password);
+    const createdUser = await this.dbContext.getModel(DatabaseModel.Users).create(user);
+    if (isNil(createdUser)) {
+      throw new Error('Account not created');
+    }
+    await this.sendAccountActivationEmail(createdUser);
+  }
+
+  private async userExists(user: User): Promise<boolean> {
+    const userWithSameUsername = await this.findByField('username', user.username);
+    if (!isNil(userWithSameUsername)) {
+      return true;
+    }
+    const userWithSameEmail = await this.findByField('email', user.email);
+    if (!isNil(userWithSameEmail)) {
+      return true;
+    }
+    console.log('Returning false');
+    return false;
+  }
+
+  private async sendAccountActivationEmail(user: User): Promise<void> {
+    if (isNil(user)) {
+      throw new Error('Empty user data');
+    }
+    const token = await this.generateActivationToken(user);
+    const to = user.email;
+    const from = this.configuration.getEmailConfig().from;
+    const activationLink = `${this.configuration.getClientBaseUrl()}/account/activate?token=${token}`;
+
+    const templateParameters: ActivateAccountParameters = {
+      name: user.firstName,
+      activationLink: activationLink,
+    };
+
+    try {
+      await this.emailService.sendAccountActivationEmail(to, from, templateParameters);
+    } catch (e) {
+      throw new Error(`Error sending sandbox activation e-mail: ${e}`);
+    }
   }
 
   private get oauthConfig(): OAuthConfiguration {

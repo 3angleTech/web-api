@@ -22,6 +22,7 @@ export class AuthController implements IAuthController {
   ) {
     this.token = this.token.bind(this);
     this.getAccount = this.getAccount.bind(this);
+    this.createAccount = this.createAccount.bind(this);
     this.activateAccount = this.activateAccount.bind(this);
     this.logout = this.logout.bind(this);
   }
@@ -60,11 +61,23 @@ export class AuthController implements IAuthController {
     res.json(user);
   }
 
+  public async createAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
+    try {
+      await this.accountService.create(req.body);
+      res.json({ message: 'User created succesfully.' });
+    } catch (e) {
+      Logger.getInstance().log(LogLevel.Error, `Account creation error: ${e}`);
+      res.status(500).json({ message: `${e}` });
+    }
+  }
+
   public async activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     try {
       await this.accountService.activate(req.query.token);
+      res.json({ message: 'Account activated succesfully.' });
     } catch (e) {
       Logger.getInstance().log(LogLevel.Error, `Account activation Error: ${e}`);
+      res.status(500).json({ message: `${e}` });
     }
   }
 
