@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      # ensure Docker is up & running
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  pre_build:
+    commands:
+      # launch web-api containers needed for running the tests
+      - docker-compose up -d 3at-postgres
+      # install node dependencies
+      - cd ./web-api/ && npm install && cd ..
+  build:
+    commands:
+      # web-api tests
+      - cd ./web-api/ && npm run test && cd ..

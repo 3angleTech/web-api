@@ -1,0 +1,25 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      # ensure Docker is up & running
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  pre_build:
+    commands:
+      # login to AWS & set environment variables
+      - $(aws ecr get-login --no-include-email)
+      - TAG="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+      - API_IMAGE_URI="${REPOSITORY_URI}/node-api:${TAG}"
+  build:
+    commands:
+      # build web-api docker image
+      - docker build --tag "$API_IMAGE_URI" ./web-api/
+  post_build:
+    commands:
+      # push images to ECR
+      - docker push "$API_IMAGE_URI"
+      - printf '[{"name":"node-api","imageUri":"%s"}]' "$API_IMAGE_URI" > images_api.json
+artifacts:
+  files:
+  - images_api.json
