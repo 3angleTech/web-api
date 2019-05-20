@@ -48,8 +48,7 @@ export class AuthController implements IAuthController {
     return this.configuration.getOAuthConfig();
   }
 
-  public async token(
-    req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
+  public async token(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     try {
       // automatically set the accessToken and refreshToken for clients using Http Only cookies
       if (req.body.grant_type === refreshTokenGrantName) {
@@ -59,6 +58,10 @@ export class AuthController implements IAuthController {
           req.body.access_token = accessToken;
           req.body.refresh_token = refreshToken;
         }
+      }
+      if (!req.body.username && req.body.email) {
+        const loadedUser: User = await this.accountService.findByField('email', req.body.email);
+        req.body.username = loadedUser.username;
       }
       const token = await this.oauthServer.token(req, res);
       res.cookie(accessTokenCookieName, token.accessToken, {

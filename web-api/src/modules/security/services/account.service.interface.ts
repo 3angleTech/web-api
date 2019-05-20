@@ -47,6 +47,13 @@ export interface IAccountService {
   find(userId: number): Promise<User>;
 
   /**
+   * Looks for a user based on the value of the  given field.
+   * @param field  The name of the lookup field
+   * @param value  The value of the lookup field
+   */
+  findByField(field: string, value: any): Promise<User>;
+
+  /**
    * Activates an user's account based on the provided token.
    * @param token Activation token.
    */
