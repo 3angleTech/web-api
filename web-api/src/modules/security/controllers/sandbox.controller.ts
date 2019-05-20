@@ -54,7 +54,7 @@ export class SandboxController implements ISandboxController {
     };
 
     this.emailService.sendAccountActivationEmail(to, from, templateParameters).then(() => {
-      res.json({ message: 'Mail was sent succesfully.' });
+      res.json({ message: 'Mail was sent successfully.' });
     }).catch((e) => {
       console.log(`Error sending sandbox activation e-mail: ${e}`);
     });

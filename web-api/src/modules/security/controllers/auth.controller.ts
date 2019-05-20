@@ -64,7 +64,7 @@ export class AuthController implements IAuthController {
   public async createAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     try {
       await this.accountService.create(req.body);
-      res.json({ message: 'User created succesfully.' });
+      res.json({ message: 'User created successfully.' });
     } catch (e) {
       Logger.getInstance().log(LogLevel.Error, `Account creation error: ${e}`);
       res.status(500).json({ message: `${e}` });
@@ -74,7 +74,7 @@ export class AuthController implements IAuthController {
   public async activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     try {
       await this.accountService.activate(req.query.token);
-      res.json({ message: 'Account activated succesfully.' });
+      res.json({ message: 'Account activated successfully.' });
     } catch (e) {
       Logger.getInstance().log(LogLevel.Error, `Account activation Error: ${e}`);
       res.status(500).json({ message: `${e}` });
