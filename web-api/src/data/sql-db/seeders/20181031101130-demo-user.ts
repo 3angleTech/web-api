@@ -6,6 +6,7 @@
 
 import { DataTypes, QueryInterface } from 'sequelize';
 import { encrypt } from '../../../common/crypto';
+import { ANONYMOUS_USER_ID } from '../../../modules/security';
 
 module.exports = {
   up: async (queryInterface: QueryInterface, Sequelize: DataTypes) => {
@@ -16,8 +17,8 @@ module.exports = {
         email: 'ionut@3angle.tech',
         first_name: 'Ionut Cristian',
         last_name: 'Paraschiv',
-        created_by: -1,
-        updated_by: -1,
+        created_by: ANONYMOUS_USER_ID,
+        updated_by: ANONYMOUS_USER_ID,
         created_at: new Date(),
         updated_at: new Date(),
       },

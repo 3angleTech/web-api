@@ -12,6 +12,11 @@ export interface Credentials {
 }
 
 /**
+ * Provides an ID to be used for anonymous users.
+ */
+export const ANONYMOUS_USER_ID: number = -1;
+
+/**
  * Handles action related to users' accounts.
  */
 export interface IAccountService {
