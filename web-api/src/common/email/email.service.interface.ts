@@ -54,7 +54,7 @@ export interface IEmailService {
   sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void>;
 
   /**
-   * Sends an email containing a password reset link.   *
+   * Sends an email containing a password reset link.
    * @param to Email recipient.
    * @param from Email sender.
    * @param templateParameters Parameters to be replaced in the template.
