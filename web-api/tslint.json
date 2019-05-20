@@ -3,7 +3,8 @@
   "rules": {
     "file-header": [
       true,
-      "Copyright .* 2018 THREEANGLE SOFTWARE SOLUTIONS SRL"
+      "@license",
+      "Copyright \\(c\\) \\d{4} THREEANGLE SOFTWARE SOLUTIONS SRL"
     ],
     "import-blacklist": [
       true,
