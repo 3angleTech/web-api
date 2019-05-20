@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
 
 import { inject, injectable } from 'inversify';
 import { IConfigurationService } from '../configuration';
 import { IEmailProviderDriver } from './email-provider-driver.interface';
-import { ActivateAccountParameters, Email, IEmailService, NewAccountParameters } from './email.service.interface';
+import { ActivateAccountParameters, Email, ForgotPasswordParameters, IEmailService, NewAccountParameters } from './email.service.interface';
 
 @injectable()
 export class EmailService implements IEmailService {
@@ -22,12 +22,30 @@ export class EmailService implements IEmailService {
     try {
       await this.emailDriver.sendEmail(email);
     } catch (e) {
+      console.log('Failed to send email:', email);
       throw e;
     }
   }
 
   public async sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void> {
     const templateId = this.configuration.getEmailConfig().templateIds.accountActivation;
+
+    const email: Email = {
+      to: to,
+      from: from,
+      templateId: templateId,
+      dynamic_template_data: templateParameters,
+    };
+
+    try {
+      await this.sendEmail(email);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async sendForgotPasswordEmail(to: string, from: string, templateParameters: ForgotPasswordParameters): Promise<void> {
+    const templateId = this.configuration.getEmailConfig().templateIds.forgotPassword;
 
     const email: Email = {
       to: to,

@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
 
@@ -31,4 +31,5 @@ export * from './services/account.service.interface';
 export * from './services/oauth-server.interface';
 export * from './controllers/auth.controller.interface';
 export * from './controllers/sandbox.controller';
-export * from './middlewares/authenticated.middleware';
+export * from './middlewares/authenticated-user.middleware';
+export * from './middlewares/valid-access-token.middleware';

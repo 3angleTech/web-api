@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
 
@@ -9,6 +9,20 @@ import { User } from '../../../data';
 export interface Credentials {
   username: string;
   password: string;
+}
+
+export interface IPasswordChangeReq {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export interface IForgotPasswordReq {
+  email: string;
+}
+
+export interface IPasswordResetReq {
+  token: string;
+  newPassword: string;
 }
 
 /**
@@ -46,8 +60,17 @@ export interface IAccountService {
 
   /**
    * Creates an user account.
-   * @param user The user object
+   * @param newUserPartial The user object
+   * @param createdBy The ID of the user who made this request.
    */
-  create(user: User): Promise<void>;
+  create(newUserPartial: Partial<User>, createdBy: number): Promise<void>;
+
+  /**
+   * Updates an user account.
+   * @param userPartial A partial user object that contains the desired changes.
+   * @param updatedBy The ID of the user who made this request.
+   */
+  update(userPartial: Partial<User>, updatedBy: number): Promise<void>;
 }
+
 export const IAccountService = Symbol.for('IAccountService');

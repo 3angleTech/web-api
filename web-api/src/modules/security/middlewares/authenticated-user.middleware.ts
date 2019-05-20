@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
 
@@ -11,7 +11,7 @@ import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse, UserContext } from '../../../core';
 import { accessTokenCookieName } from '../controllers/auth.controller.interface';
 
-export const authenticated = async (req: AppRequest, res: AppResponse, next: NextFunction) => {
+export const authenticatedUserMiddleware = async (req: AppRequest, res: AppResponse, next: NextFunction) => {
   // when accessToken is sent via cookie, we initialize the authorization header used by the oauth middleware
   const accessToken = req.cookies[accessTokenCookieName];
   if (!isNil(accessToken)) {

@@ -1,10 +1,11 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
 
 import { inject, injectable } from 'inversify';
+import { UpdateOptions } from 'sequelize';
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
 import { encrypt, verify } from '../../../common/crypto';
 import { ActivateAccountParameters, IEmailService } from '../../../common/email';
@@ -23,7 +24,12 @@ export class AccountService implements IAccountService {
     @inject(IConfigurationService) private configuration: IConfigurationService,
     @inject(IEmailService) private emailService: IEmailService,
     @inject(IJwtTokenService) private tokenService: IJwtTokenService,
-  ) { }
+  ) {
+  }
+
+  private get oauthConfig(): OAuthConfiguration {
+    return this.configuration.getOAuthConfig();
+  }
 
   public async verify(credentials: Credentials): Promise<User> {
     const userObject = await this.dbContext.getModel(DatabaseModel.Users).findOne({
@@ -67,19 +73,21 @@ export class AccountService implements IAccountService {
   }
 
   public async activate(token: string): Promise<void> {
-    const jwtToken = await this.tokenService.verify(token, this.configuration.getOAuthConfig().clients[0].secret);
+    const jwtToken = await this.tokenService.verify(token, this.oauthConfig.accessTokenSecret);
     if (isNil(jwtToken.userId)) {
       throw new Error('Token doesn\'t have the user ID set');
     }
     Logger.getInstance().log(LogLevel.Debug, `Decoded token ${jwtToken.userId}`);
-    const result = await this.dbContext.getModel(DatabaseModel.Users).update({
+    const userPartial: Partial<User> = {
       active: true,
-    }, {
-        where: {
-          id: jwtToken.userId,
-        },
-        returning: true,
-      });
+    };
+    const updateOptions: UpdateOptions = {
+      where: {
+        id: jwtToken.userId,
+      },
+      returning: true,
+    };
+    const result = await this.dbContext.getModel(DatabaseModel.Users).update(userPartial, updateOptions);
     const affectedRows: User[] = result[1];
     if (isNil(affectedRows)) {
       throw new Error(`User not found (ID = ${jwtToken.userId})`);
@@ -90,29 +98,70 @@ export class AccountService implements IAccountService {
     return this.tokenService.generate({
       userId: user.id,
       clientId: this.oauthConfig.clients[0].id,
-      clientSecret: this.oauthConfig.clients[0].secret,
-      expirySeconds: this.oauthConfig.clients[0].activationTokenExpirySeconds,
+      clientSecret: this.oauthConfig.accessTokenSecret,
+      expirySeconds: this.oauthConfig.clients[0].accessTokenExpirySeconds,
       grants: this.oauthConfig.clients[0].grants,
     });
   }
 
-  public async create(user: User): Promise<void> {
-    if (isNil(user)) {
-      throw new Error('No user data sent');
+  public async create(newUserPartial: Partial<User>, createdBy: number): Promise<void> {
+    if (isNil(newUserPartial)) {
+      throw new Error('No user data provided');
     }
-    const userExists = await this.userExists(user);
+    const userExists = await this.userExists(newUserPartial);
     if (userExists) {
       throw new Error('An user account with the same username or email already exists');
     }
-    user.password = encrypt(user.password);
-    const createdUser = await this.dbContext.getModel(DatabaseModel.Users).create(user);
+    this.prepareUserPartialForCreate(newUserPartial, createdBy);
+    const createdUser = await this.dbContext.getModel(DatabaseModel.Users).create(newUserPartial);
     if (isNil(createdUser)) {
       throw new Error('Account not created');
     }
     await this.sendAccountActivationEmail(createdUser);
   }
 
-  private async userExists(user: User): Promise<boolean> {
+  public async update(userPartial: Partial<User>, updatedBy: number): Promise<void> {
+    if (isNil(userPartial)) {
+      throw new Error('No user changes provided');
+    }
+    this.prepareUserPartialForUpdate(userPartial, updatedBy);
+
+    const updateOptions: UpdateOptions = {
+      where: {
+        id: userPartial.id,
+      },
+      returning: true,
+    };
+    const updatedUser = await this.dbContext.getModel(DatabaseModel.Users).update(userPartial, updateOptions);
+    if (isNil(updatedUser)) {
+      throw new Error('Failed to updated user');
+    }
+  }
+
+  private prepareUserPartialForCreate(newUserPartial: Partial<User>, createdBy: number): void {
+    const currentDate: Date = new Date();
+    newUserPartial.createdAt = currentDate;
+    newUserPartial.updatedAt = currentDate;
+
+    newUserPartial.createdBy = createdBy;
+    newUserPartial.updatedBy = createdBy;
+
+    newUserPartial.active = false;
+    newUserPartial.password = encrypt(newUserPartial.password);
+  }
+
+  private prepareUserPartialForUpdate(userPartial: Partial<User>, updatedBy: number): void {
+    const currentDate: Date = new Date();
+    userPartial.updatedAt = currentDate;
+
+    userPartial.updatedBy = updatedBy;
+
+    if (userPartial.password) {
+      userPartial.password = encrypt(userPartial.password);
+    }
+  }
+
+  private async userExists(user: Partial<User>): Promise<boolean> {
     const userWithSameUsername = await this.findByField('username', user.username);
     if (!isNil(userWithSameUsername)) {
       return true;
@@ -129,25 +178,18 @@ export class AccountService implements IAccountService {
     if (isNil(user)) {
       throw new Error('Empty user data');
     }
-    const token = await this.generateActivationToken(user);
-    const to = user.email;
-    const from = this.configuration.getEmailConfig().from;
-    const activationLink = `${this.configuration.getClientBaseUrl()}/account/activate?token=${token}`;
+    const toAddress: string = user.email;
+    const fromAddress: string = this.configuration.getEmailConfig().from;
+
+    const accessToken: string = await this.generateActivationToken(user);
+    const encodedAccessToken: string = encodeURIComponent(accessToken);
+    const activationLink: string = `${this.configuration.getClientBaseUrl()}/account/activate?token=${encodedAccessToken}`;
 
     const templateParameters: ActivateAccountParameters = {
       name: user.firstName,
       activationLink: activationLink,
     };
 
-    try {
-      await this.emailService.sendAccountActivationEmail(to, from, templateParameters);
-    } catch (e) {
-      throw new Error(`Error sending sandbox activation e-mail: ${e}`);
-    }
+    return this.emailService.sendAccountActivationEmail(toAddress, fromAddress, templateParameters);
   }
-
-  private get oauthConfig(): OAuthConfiguration {
-    return this.configuration.getOAuthConfig();
-  }
-
 }
