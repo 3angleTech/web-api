@@ -4,14 +4,14 @@
   "description": "Open Source NodeJS Project w/ TypeScript",
   "main": "index.js",
   "scripts": {
-    "tsc": "tsc",
-    "tslint": "tslint",
+    "build": "rimraf ./dist && tslint --project tsconfig.json './src/**/*.ts' && tsc",
+    "prepare-db": "npm run sequelize db:migrate && npm run sequelize db:seed:all",
     "rimraf": "rimraf",
     "sequelize": "sequelize",
-    "prepare-db": "npm run sequelize db:migrate && npm run sequelize db:seed:all",
-    "build": "rimraf ./dist && tslint --project tsconfig.json './src/**/*.ts' && tsc",
+    "start": "npm run prepare-db && node dist/index.js",
     "test": "npm run build && NODE_ENV=test npm run prepare-db && NODE_ENV=test nyc mocha dist/**/*.spec.js dist/common/**/*.spec.js dist/modules/**/*.spec.js --exit",
-    "start": "npm run prepare-db && node dist/index.js"
+    "tsc": "tsc",
+    "tslint": "tslint"
   },
   "repository": {
     "type": "git",
