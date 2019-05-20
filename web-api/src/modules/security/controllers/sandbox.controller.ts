@@ -1,13 +1,13 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
 
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
 import { IConfigurationService } from '../../../common/configuration';
-import { ActivateAccountParameters, Email, IEmailService } from '../../../common/email';
+import { ActivateAccountParameters, IEmailService } from '../../../common/email';
 import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse } from '../../../core';
 import { IAccountService } from '../services/account.service.interface';
@@ -25,6 +25,7 @@ export interface ISandboxController {
    */
   sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): void;
 }
+
 export const ISandboxController = Symbol.for('ISandboxController');
 
 @injectable()
@@ -39,21 +40,21 @@ export class SandboxController implements ISandboxController {
   }
 
   public async sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
-    const user = await this.accountService.find(7);
+    const user = await this.accountService.find(req.params.userId);
     if (isNil(user)) {
       throw new Error('User not found');
     }
-    const token = await this.accountService.generateActivationToken(user);
-    const to = user.email;
-    const from = this.configuration.getEmailConfig().from;
-    const activationLink = `${this.configuration.getClientBaseUrl()}/account/activate?token=${token}`;
+    const token: string = await this.accountService.generateActivationToken(user);
+    const toAddress: string = user.email;
+    const fromAddress: string = this.configuration.getEmailConfig().from;
+    const activationLink: string = `${this.configuration.getClientBaseUrl()}/account/activate?token=${token}`;
 
     const templateParameters: ActivateAccountParameters = {
       name: user.firstName,
       activationLink: activationLink,
     };
 
-    this.emailService.sendAccountActivationEmail(to, from, templateParameters).then(() => {
+    this.emailService.sendAccountActivationEmail(toAddress, fromAddress, templateParameters).then(() => {
       res.json({ message: 'Mail was sent successfully.' });
     }).catch((e) => {
       console.log(`Error sending sandbox activation e-mail: ${e}`);

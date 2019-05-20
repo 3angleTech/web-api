@@ -106,7 +106,8 @@ class App {
       .post(this.authController.createAccount);
     router.route('/account/activate')
       .get(this.authController.activateAccount);
-    router.route('/send-mail')
+
+    router.route('/sandbox/send-mail/:userId')
       .get(this.sandboxController.sendActivationMail);
 
     this.express.use('/api/v1', router);
