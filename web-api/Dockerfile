@@ -15,4 +15,4 @@ RUN npm run build
 ENV NODE_ENV=docker
 
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "prepare-db-and-start" ]
