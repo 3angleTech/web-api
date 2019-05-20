@@ -12,7 +12,7 @@ export interface Credentials {
 }
 
 export interface IPasswordChangeReq {
-  oldPassword: string;
+  currentPassword: string;
   newPassword: string;
 }
 

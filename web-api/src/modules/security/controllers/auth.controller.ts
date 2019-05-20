@@ -108,7 +108,7 @@ export class AuthController implements IAuthController {
     // TODO: Refactor `IAccountService.verify()` to avoid loading the user a 2nd time.
     const verifiedUser = await this.accountService.verify({
       username: currentUser.username,
-      password: passwordChange.oldPassword,
+      password: passwordChange.currentPassword,
     });
     if (isNil(verifiedUser)) {
       Logger.getInstance().log(LogLevel.Error, 'Invalid password');
