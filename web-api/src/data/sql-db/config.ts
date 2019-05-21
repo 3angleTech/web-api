@@ -4,6 +4,8 @@
  * Available under MIT license webApi/LICENSE
  */
 
+import 'reflect-metadata';
+
 import * as config from 'config';
 import { isString } from 'lodash';
 

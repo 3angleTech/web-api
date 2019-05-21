@@ -1,32 +1,29 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
-
-import * as cors from 'cors';
-import * as express from 'express';
-
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
-// tslint:disable-next-line:no-duplicate-imports
-import { Express, NextFunction, Request, Response } from 'express';
+import { Express, NextFunction, Request, Response, Router } from 'express';
+
 import { appContainer } from './app.inversify.config';
 import { errorMiddleware } from './common/error';
 import { AppContext, AppRequest, AppResponse } from './core';
 import { IDatabaseContext } from './data';
 import { IHealthCheckController } from './modules/health-check';
-import { authenticated, IAuthController, ISandboxController } from './modules/security';
+import { authenticatedUserMiddleware, IAuthController, ISandboxController, validAccessTokenMiddleware } from './modules/security';
+import { createExpressApplication, createExpressRouter } from './other/express.factory';
 
 class App {
-  public express: Express;
+  public readonly express: Express;
 
   private authController: IAuthController;
   private healthCheckController: IHealthCheckController;
   private sandboxController: ISandboxController;
 
   constructor() {
-    this.express = express();
+    this.express = createExpressApplication();
     this.enableCORS();
     this.initialize();
     this.initControllers();
@@ -34,19 +31,17 @@ class App {
     this.registerRoutes();
   }
 
+  /**
+   * Configure server to deal with CORS.
+   * @see: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+   */
   private enableCORS(): void {
-    /**
-     * Configure server to deal with CORS.
-     * For more info see:
-     * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-     */
-    this.express.all('/*', (req: Request, res: Response, next: NextFunction) => {
-      const origin = <string>req.headers.origin || '*';
+    this.express.all('/*', (req: Request, res: Response, next: NextFunction): void => {
+      const origin: string = <string>req.headers.origin || '*';
       res.header('Access-Control-Allow-Origin', origin);
       res.header('Access-Control-Allow-Credentials', 'true');
       res.header('Access-Control-Allow-Methods', 'POST,PUT,GET,DELETE');
-      res.header('Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
       next();
     });
   }
@@ -89,8 +84,9 @@ class App {
     });
   }
 
+  // tslint:disable-next-line:max-func-body-length
   private registerRoutes(): void {
-    const router = express.Router();
+    const router: Router = createExpressRouter();
 
     router.route('/health-check')
       .get(this.healthCheckController.run);
@@ -101,17 +97,25 @@ class App {
       .get(this.authController.logout);
 
     router.route('/account/me')
-      .get(authenticated, this.authController.getAccount);
-    router.route('/account/sign-up')
+      .get(authenticatedUserMiddleware, this.authController.getAccount);
+    router.route('/account/create')
       .post(this.authController.createAccount);
     router.route('/account/activate')
       .get(this.authController.activateAccount);
-    router.route('/send-mail')
+
+    router.route('/account/change-password')
+      .post(authenticatedUserMiddleware, this.authController.changePassword);
+    router.route('/account/forgot-password')
+      .post(this.authController.forgotPassword);
+    router.route('/account/reset-password')
+      .post(validAccessTokenMiddleware, this.authController.resetPassword);
+
+    router.route('/sandbox/send-mail/:userId')
       .get(this.sandboxController.sendActivationMail);
 
     this.express.use('/api/v1', router);
     this.express.use(errorMiddleware);
   }
-
 }
+
 export default new App().express;

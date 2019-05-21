@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
 
@@ -10,6 +10,25 @@ export interface Credentials {
   username: string;
   password: string;
 }
+
+export interface IPasswordChangeReq {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface IForgotPasswordReq {
+  email: string;
+}
+
+export interface IPasswordResetReq {
+  token: string;
+  newPassword: string;
+}
+
+/**
+ * Provides an ID to be used for anonymous users.
+ */
+export const ANONYMOUS_USER_ID: number = -1;
 
 /**
  * Handles action related to users' accounts.
@@ -28,6 +47,13 @@ export interface IAccountService {
   find(userId: number): Promise<User>;
 
   /**
+   * Looks for a user based on the value of the  given field.
+   * @param field  The name of the lookup field
+   * @param value  The value of the lookup field
+   */
+  findByField(field: string, value: any): Promise<User>;
+
+  /**
    * Activates an user's account based on the provided token.
    * @param token Activation token.
    */
@@ -41,8 +67,17 @@ export interface IAccountService {
 
   /**
    * Creates an user account.
-   * @param user The user object
+   * @param newUserPartial The user object
+   * @param createdBy The ID of the user who made this request.
    */
-  create(user: User): Promise<void>;
+  create(newUserPartial: Partial<User>, createdBy: number): Promise<void>;
+
+  /**
+   * Updates an user account.
+   * @param userPartial A partial user object that contains the desired changes.
+   * @param updatedBy The ID of the user who made this request.
+   */
+  update(userPartial: Partial<User>, updatedBy: number): Promise<void>;
 }
+
 export const IAccountService = Symbol.for('IAccountService');

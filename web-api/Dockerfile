@@ -7,6 +7,8 @@ COPY package*.json ./
 
 RUN npm install
 
+# The node_modules directory is ignored by this COPY command.
+# @see: .dockerignore
 COPY . .
 
 RUN npm run build
@@ -15,4 +17,4 @@ RUN npm run build
 ENV NODE_ENV=docker
 
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "prepare-db-and-start" ]

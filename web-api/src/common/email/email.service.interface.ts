@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 THREEANGLE SOFTWARE SOLUTIONS SRL
+ * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
 
@@ -20,6 +20,11 @@ export interface Email {
 export interface ActivateAccountParameters {
   name: string;
   activationLink: string;
+}
+
+export interface ForgotPasswordParameters {
+  name: string;
+  passwordResetLink: string;
 }
 
 /**
@@ -47,6 +52,14 @@ export interface IEmailService {
    * @param templateParameters Parameters to be replaced in the template.
    */
   sendAccountActivationEmail(to: string, from: string, templateParameters: ActivateAccountParameters): Promise<void>;
+
+  /**
+   * Sends an email containing a password reset link.
+   * @param to Email recipient.
+   * @param from Email sender.
+   * @param templateParameters Parameters to be replaced in the template.
+   */
+  sendForgotPasswordEmail(to: string, from: string, templateParameters: ForgotPasswordParameters): Promise<void>;
 
   /**
    * Sends a new account email.

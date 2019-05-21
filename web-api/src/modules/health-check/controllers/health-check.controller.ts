@@ -21,6 +21,7 @@ export class HealthCheckController implements IHealthCheckController {
     // TODO: check db connection etc
     res.json({
       status: 'Running',
+      timestamp: new Date().toISOString(),
     });
   }
 
