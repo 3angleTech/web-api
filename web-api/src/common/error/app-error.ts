@@ -11,7 +11,7 @@ export interface ErrorParameters {
   name?: string;
 }
 
-export class AppError extends Error {
+export class AppError extends Error implements ErrorParameters {
   public httpStatusCode: number;
 
   constructor(parameters: ErrorParameters) {

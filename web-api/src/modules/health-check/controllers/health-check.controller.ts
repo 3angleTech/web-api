@@ -5,24 +5,26 @@
  */
 
 import { NextFunction } from 'express';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { AppRequest, AppResponse } from '../../../core';
+import { IDatabaseContext } from '../../../data';
 import { IHealthCheckController } from './health-check.controller.interface';
 
 @injectable()
 export class HealthCheckController implements IHealthCheckController {
 
   constructor(
+    @inject(IDatabaseContext) private dbContext: IDatabaseContext,
   ) {
     this.run = this.run.bind(this);
   }
 
-  public run(req: AppRequest, res: AppResponse, next: NextFunction): void {
-    // TODO: check db connection etc
+  public async run(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
+    const dbStatus = await this.dbContext.status();
     res.json({
       status: 'Running',
       timestamp: new Date().toISOString(),
+      database: dbStatus,
     });
   }
-
 }

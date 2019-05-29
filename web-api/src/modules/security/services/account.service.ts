@@ -105,25 +105,23 @@ export class AccountService implements IAccountService {
   }
 
   public async create(newUserPartial: Partial<User>, createdBy: number): Promise<void> {
-    if (isNil(newUserPartial)) {
-      throw new Error('No user data provided');
-    }
     const userExists = await this.userExists(newUserPartial);
     if (userExists) {
-      throw new Error('An user account with the same username or email already exists');
+      const alreadyExistsMessage = 'An user account with the same username or email already exists';
+      Logger.getInstance().log(LogLevel.Error, alreadyExistsMessage);
+      throw new Error(alreadyExistsMessage);
     }
     this.prepareUserPartialForCreate(newUserPartial, createdBy);
     const createdUser = await this.dbContext.getModel(DatabaseModel.Users).create(newUserPartial);
     if (isNil(createdUser)) {
-      throw new Error('Account not created');
+      const accountNotCreatedMessage = 'Account not created';
+      Logger.getInstance().log(LogLevel.Error, accountNotCreatedMessage);
+      throw new Error(accountNotCreatedMessage);
     }
     await this.sendAccountActivationEmail(createdUser);
   }
 
   public async update(userPartial: Partial<User>, updatedBy: number): Promise<void> {
-    if (isNil(userPartial)) {
-      throw new Error('No user changes provided');
-    }
     this.prepareUserPartialForUpdate(userPartial, updatedBy);
 
     const updateOptions: UpdateOptions = {
@@ -170,14 +168,10 @@ export class AccountService implements IAccountService {
     if (!isNil(userWithSameEmail)) {
       return true;
     }
-    console.log('Returning false');
     return false;
   }
 
   private async sendAccountActivationEmail(user: User): Promise<void> {
-    if (isNil(user)) {
-      throw new Error('Empty user data');
-    }
     const toAddress: string = user.email;
     const fromAddress: string = this.configuration.getEmailConfig().from;
 
@@ -189,7 +183,6 @@ export class AccountService implements IAccountService {
       name: user.firstName,
       activationLink: activationLink,
     };
-
-    return this.emailService.sendAccountActivationEmail(toAddress, fromAddress, templateParameters);
+    await this.emailService.sendAccountActivationEmail(toAddress, fromAddress, templateParameters);
   }
 }

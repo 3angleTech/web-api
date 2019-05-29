@@ -22,5 +22,10 @@ export interface IDatabaseContext {
    * @param model The name of the table for the desired sequelize model.
    */
   getModel(model: DatabaseModel): SequelizeModel<any, any>;
+
+  /**
+   * Check the DB connection status.
+   */
+  status(): Promise<boolean>;
 }
 export const IDatabaseContext = Symbol.for('IDatabaseContext');

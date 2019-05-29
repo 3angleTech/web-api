@@ -6,6 +6,7 @@
 
 import { inject, injectable } from 'inversify';
 import { IConfigurationService } from '../configuration';
+import { Logger, LogLevel } from '../logger';
 import { IEmailProviderDriver } from './email-provider-driver.interface';
 import { ActivateAccountParameters, Email, ForgotPasswordParameters, IEmailService, NewAccountParameters } from './email.service.interface';
 
@@ -21,9 +22,12 @@ export class EmailService implements IEmailService {
   public async sendEmail(email: Email): Promise<void> {
     try {
       await this.emailDriver.sendEmail(email);
-    } catch (e) {
-      console.log('Failed to send email:', email);
-      throw e;
+    } catch (err) {
+      const errorMessage = 'Failed to send email';
+      Logger.getInstance().log(LogLevel.Error, errorMessage, err);
+      // TODO: Provide a mock service for development and remove this error log entry.
+      console.error(errorMessage, email);
+      throw err;
     }
   }
 
@@ -37,11 +41,7 @@ export class EmailService implements IEmailService {
       dynamic_template_data: templateParameters,
     };
 
-    try {
-      await this.sendEmail(email);
-    } catch (e) {
-      throw e;
-    }
+    await this.sendEmail(email);
   }
 
   public async sendForgotPasswordEmail(to: string, from: string, templateParameters: ForgotPasswordParameters): Promise<void> {
@@ -54,19 +54,11 @@ export class EmailService implements IEmailService {
       dynamic_template_data: templateParameters,
     };
 
-    try {
-      await this.sendEmail(email);
-    } catch (e) {
-      throw e;
-    }
+    await this.sendEmail(email);
   }
 
   public async sendNewAccountEmail(to: string, from: string, templateParameters: NewAccountParameters): Promise<void> {
     // TODO: Pass parameters such as username in e-mail
-    try {
-      await this.sendEmail(null);
-    } catch (e) {
-      throw e;
-    }
+    await this.sendEmail(null);
   }
 }

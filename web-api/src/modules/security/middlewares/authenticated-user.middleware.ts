@@ -6,12 +6,11 @@
 
 import { NextFunction } from 'express';
 import { UnauthorizedError } from '../../../common/error';
-import { Logger, LogLevel } from '../../../common/logger';
 import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse, UserContext } from '../../../core';
 import { accessTokenCookieName } from '../controllers/auth.controller.interface';
 
-export const authenticatedUserMiddleware = async (req: AppRequest, res: AppResponse, next: NextFunction) => {
+export async function authenticatedUserMiddleware(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
   // when accessToken is sent via cookie, we initialize the authorization header used by the oauth middleware
   const accessToken = req.cookies[accessTokenCookieName];
   if (!isNil(accessToken)) {
@@ -26,9 +25,8 @@ export const authenticatedUserMiddleware = async (req: AppRequest, res: AppRespo
       user: user,
     };
     res.locals.userContext = userContext;
-    next();
+    return next();
   } catch (err) {
-    Logger.getInstance().log(LogLevel.Warning, err.message, { errorStack: err.stack });
     return next(new UnauthorizedError(err));
   }
-};
+}
