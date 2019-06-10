@@ -16,14 +16,37 @@ export const refreshTokenCookieName: string = 'refreshToken';
  * Provides authentication controller endpoints for the application.
  */
 export interface IAuthController {
-
   /**
-   * Provides a new OAuth token for an authorized token request.
+   * Provides the logic for the activation of an account.
    * @param req Request object data.
    * @param res Response object data.
    * @param next Middleware function to be called.
    */
-  token(req: AppRequest, res: AppResponse, next: NextFunction): void;
+  activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): void;
+
+  /**
+   * Change the password for a given user.
+   * @param req Request object data.
+   * @param res Response object data.
+   * @param next Middleware function to be called.
+   */
+  changePassword(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void>;
+
+  /**
+   * Creates an user account.
+   * @param req Request object data.
+   * @param res Response object data.
+   * @param next Middleware function to be called.
+   */
+  createAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void>;
+
+  /**
+   * Request a "forgot password" link that can be used to reset the password.
+   * @param req Request object data.
+   * @param res Response object data.
+   * @param next Middleware function to be called.
+   */
+  forgotPassword(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void>;
 
   /**
    * Retrieves user data.
@@ -42,30 +65,6 @@ export interface IAuthController {
   logout(req: AppRequest, res: AppResponse, next: NextFunction): void;
 
   /**
-   * Creates an user account.
-   * @param req Request object data.
-   * @param res Response object data.
-   * @param next Middleware function to be called.
-   */
-  createAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void>;
-
-  /**
-   * Change the password for a given user.
-   * @param req Request object data.
-   * @param res Response object data.
-   * @param next Middleware function to be called.
-   */
-  changePassword(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void>;
-
-  /**
-   * Request a "forgot password" link that can be used to reset the password.
-   * @param req Request object data.
-   * @param res Response object data.
-   * @param next Middleware function to be called.
-   */
-  forgotPassword(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void>;
-
-  /**
    * Reset the password for a given user.
    * @param req Request object data.
    * @param res Response object data.
@@ -74,11 +73,12 @@ export interface IAuthController {
   resetPassword(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void>;
 
   /**
-   * Provides the logic for the activation of an account.
+   * Provides a new OAuth token for an authorized token request.
    * @param req Request object data.
    * @param res Response object data.
    * @param next Middleware function to be called.
    */
-  activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): void;
+  token(req: AppRequest, res: AppResponse, next: NextFunction): void;
 }
+
 export const IAuthController = Symbol.for('IAuthController');

@@ -6,14 +6,13 @@
 
 import { NextFunction } from 'express';
 import { UnauthorizedError } from '../../../common/error';
-import { Logger, LogLevel } from '../../../common/logger';
 import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse, UserContext } from '../../../core';
-import { IPasswordResetReq } from '../services/account.service.interface';
+import { IPasswordResetRequest } from '../services/account.service.interface';
 
-export const validAccessTokenMiddleware = async (req: AppRequest, res: AppResponse, next: NextFunction) => {
+export async function validAccessTokenMiddleware(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
   // when resetToken is sent via URL, we initialize the authorization header used by the oauth middleware
-  const passwordResetReq: IPasswordResetReq = req.body;
+  const passwordResetReq: IPasswordResetRequest = req.body;
   if (!isNil(passwordResetReq)) {
     const accessToken: string = decodeURIComponent(passwordResetReq.token);
     req.headers.authorization = `Bearer ${accessToken}`;
@@ -27,9 +26,8 @@ export const validAccessTokenMiddleware = async (req: AppRequest, res: AppRespon
       user: user,
     };
     res.locals.userContext = userContext;
-    next();
+    return next();
   } catch (err) {
-    Logger.getInstance().log(LogLevel.Warning, err.message, { errorStack: err.stack });
     return next(new UnauthorizedError(err));
   }
-};
+}

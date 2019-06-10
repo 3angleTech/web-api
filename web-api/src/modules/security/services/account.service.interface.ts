@@ -11,16 +11,16 @@ export interface Credentials {
   password: string;
 }
 
-export interface IPasswordChangeReq {
+export interface IPasswordChangeRequest {
   currentPassword: string;
   newPassword: string;
 }
 
-export interface IForgotPasswordReq {
+export interface IForgotPasswordRequest {
   email: string;
 }
 
-export interface IPasswordResetReq {
+export interface IPasswordResetRequest {
   token: string;
   newPassword: string;
 }

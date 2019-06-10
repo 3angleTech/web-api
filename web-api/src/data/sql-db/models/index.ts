@@ -12,6 +12,7 @@ const path = require('path');
 const basename = path.basename(__filename);
 import * as Sequelize from 'sequelize';
 const dbConfig = require(__dirname + '/../config.js');
+// TODO: Refactor this file to avoid creating connections on import.
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
 const db: any = {};
 

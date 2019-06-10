@@ -7,17 +7,17 @@
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
-import { ActivateAccountParameters, ForgotPasswordParameters, IEmailService } from '../../../common/email';
-import { Logger, LogLevel } from '../../../common/logger';
+import { ForgotPasswordParameters, IEmailService } from '../../../common/email';
+import { InvalidRequestError } from '../../../common/error';
 import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse } from '../../../core';
 import { DatabaseModel, IDatabaseContext, User } from '../../../data';
 import {
   ANONYMOUS_USER_ID,
   IAccountService,
-  IForgotPasswordReq,
-  IPasswordChangeReq,
-  IPasswordResetReq,
+  IForgotPasswordRequest,
+  IPasswordChangeRequest,
+  IPasswordResetRequest,
 } from '../services/account.service.interface';
 import { IJwtTokenService } from '../services/jwt-token.service.interface';
 import { IOAuthServer } from '../services/oauth-server.interface';
@@ -48,21 +48,43 @@ export class AuthController implements IAuthController {
     return this.configuration.getOAuthConfig();
   }
 
-  public async token(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
+  public async activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     try {
-      // automatically set the accessToken and refreshToken for clients using Http Only cookies
-      if (req.body.grant_type === refreshTokenGrantName) {
-        const accessToken = req.cookies[accessTokenCookieName];
-        const refreshToken = req.cookies[refreshTokenCookieName];
-        if (!isNil(accessToken) && !isNil(refreshToken)) {
-          req.body.access_token = accessToken;
-          req.body.refresh_token = refreshToken;
-        }
+      await this.accountService.activate(req.query.token);
+      res.json({ message: 'Account activated successfully.' });
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+  // tslint:disable-next-line:max-func-body-length
+  public async token(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
+    const isRefreshTokenRequest = req.body.grant_type === refreshTokenGrantName;
+    // automatically set the accessToken and refreshToken for clients using Http Only cookies
+    if (isRefreshTokenRequest) {
+      const accessToken = req.cookies[accessTokenCookieName];
+      const refreshToken = req.cookies[refreshTokenCookieName];
+      if (isNil(accessToken) || isNil(refreshToken)) {
+        return next(new InvalidRequestError({
+          httpStatusCode: 400,
+          message: 'Missing authentication information.',
+        }));
       }
-      if (!req.body.username && req.body.email) {
+      // TODO: Reformat the code to avoid updating these values.
+      req.body.access_token = accessToken;
+      req.body.refresh_token = refreshToken;
+    }
+
+    if (!req.body.username && req.body.email) {
+      try {
         const loadedUser: User = await this.accountService.findByField('email', req.body.email);
         req.body.username = loadedUser.username;
+      } catch (err) {
+        return next(err);
       }
+    }
+
+    try {
       const token = await this.oauthServer.token(req, res);
       res.cookie(accessTokenCookieName, token.accessToken, {
         httpOnly: true,
@@ -70,18 +92,19 @@ export class AuthController implements IAuthController {
       res.cookie(refreshTokenCookieName, token.refreshToken, {
         httpOnly: true,
       });
+
+      const message = isRefreshTokenRequest ? 'Token has been refreshed.' : `You are now logged in as ${token.user.username}.`;
       res.json({
-        access_token: token.accessToken,
-        refresh_token: token.refreshToken,
+        message: message,
       });
     } catch (err) {
-      Logger.getInstance().log(LogLevel.Info, err.message, { errorStack: err.stack });
       return next(err);
     }
   }
 
   public async getAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     const userId = res.getUserContext().user.id;
+
     const user = await this.accountService.find(userId);
     delete user.password;
     res.json(user);
@@ -89,74 +112,74 @@ export class AuthController implements IAuthController {
 
   public async createAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     const userContext = res.getUserContext();
-    const createdBy: number = userContext ?
-      userContext.user.id :
-      ANONYMOUS_USER_ID;
+    const createdBy: number = userContext ? userContext.user.id : ANONYMOUS_USER_ID;
     const newUserPartial: Partial<User> = req.body;
+
     try {
       await this.accountService.create(newUserPartial, createdBy);
       res.json({ message: 'User created successfully.' });
-    } catch (e) {
-      Logger.getInstance().log(LogLevel.Error, `Account creation error: ${e}`);
-      res.status(500).json({ message: `${e}` });
+    } catch (err) {
+      return next(err);
     }
   }
 
   public async changePassword(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     const currentUser: User = res.getUserContext().user;
-    const passwordChange: IPasswordChangeReq = req.body;
-    // TODO: Refactor `IAccountService.verify()` to avoid loading the user a 2nd time.
-    const verifiedUser = await this.accountService.verify({
-      username: currentUser.username,
-      password: passwordChange.currentPassword,
-    });
-    if (isNil(verifiedUser)) {
-      Logger.getInstance().log(LogLevel.Error, 'Invalid password');
-      res.status(403).json({ message: 'Invalid password' });
-      return;
-    }
-
-    const changes: Partial<User> = {
-      id: currentUser.id,
-      password: passwordChange.newPassword,
-    };
-    const updatedBy: number = currentUser.id;
-
+    const passwordChange: IPasswordChangeRequest = req.body;
     try {
+      // TODO: Refactor `IAccountService.verify()` to avoid loading the user a 2nd time.
+      const verifiedUser = await this.accountService.verify({
+        username: currentUser.username,
+        password: passwordChange.currentPassword,
+      });
+      if (isNil(verifiedUser)) {
+        return next(new InvalidRequestError({
+          httpStatusCode: 403,
+          message: 'Invalid password',
+        }));
+      }
+
+      const changes: Partial<User> = {
+        id: currentUser.id,
+        password: passwordChange.newPassword,
+      };
+      const updatedBy: number = currentUser.id;
+
       await this.accountService.update(changes, updatedBy);
       res.json({ message: 'Password changed.' });
-    } catch (e) {
-      Logger.getInstance().log(LogLevel.Error, `Password change error: ${e}`);
-      res.status(500).json({ message: `${e}` });
+    } catch (err) {
+      return next(err);
     }
   }
 
   public async forgotPassword(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
-    const passwordResetReq: IForgotPasswordReq = req.body;
-
-    const userObject = await this.dbContext.getModel(DatabaseModel.Users).
-      findOne({
+    let userObject: User = null;
+    try {
+      const passwordResetReq: IForgotPasswordRequest = req.body;
+      userObject = await this.dbContext.getModel(DatabaseModel.Users).findOne({
         where: {
           email: passwordResetReq.email,
         },
       });
-    if (isNil(userObject)) {
-      // TODO: Refactor message to avoid disclosing user account existence via forgot password requests.
-      res.status(400).json({ message: 'Invalid email.' });
-      return;
-    }
 
-    try {
+      if (isNil(userObject)) {
+        // TODO: Refactor message to avoid disclosing user account existence via forgot password requests.
+        return next(new InvalidRequestError({
+          httpStatusCode: 400,
+          message: 'Invalid email.',
+        }));
+      }
+
       await this.sendForgotPasswordEmail(userObject);
       res.json({ message: 'Forgot password email sent.' });
-    } catch (e) {
-      throw new Error(`Error sending forgot password email: ${e}`);
+    } catch (err) {
+      return next(err);
     }
   }
 
   public async resetPassword(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     const currentUser: User = res.getUserContext().user;
-    const passwordReset: IPasswordResetReq = req.body;
+    const passwordReset: IPasswordResetRequest = req.body;
 
     const changes: Partial<User> = {
       id: currentUser.id,
@@ -167,19 +190,8 @@ export class AuthController implements IAuthController {
     try {
       await this.accountService.update(changes, updatedBy);
       res.json({ message: 'Password changed.' });
-    } catch (e) {
-      Logger.getInstance().log(LogLevel.Error, `Password change error: ${e}`);
-      res.status(500).json({ message: `${e}` });
-    }
-  }
-
-  public async activateAccount(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
-    try {
-      await this.accountService.activate(req.query.token);
-      res.json({ message: 'Account activated successfully.' });
-    } catch (e) {
-      Logger.getInstance().log(LogLevel.Error, `Account activation Error: ${e}`);
-      res.status(500).json({ message: `${e}` });
+    } catch (err) {
+      return next(err);
     }
   }
 
@@ -202,10 +214,6 @@ export class AuthController implements IAuthController {
   }
 
   private async sendForgotPasswordEmail(user: User): Promise<void> {
-    if (isNil(user)) {
-      throw new Error('Empty user data');
-    }
-
     const toAddress: string = user.email;
     const fromAddress: string = this.configuration.getEmailConfig().from;
 

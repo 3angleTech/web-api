@@ -42,7 +42,7 @@ class App {
       res.header('Access-Control-Allow-Credentials', 'true');
       res.header('Access-Control-Allow-Methods', 'POST,PUT,GET,DELETE');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-      next();
+      return next();
     });
   }
 
@@ -70,17 +70,17 @@ class App {
     this.express.use(bodyParser.urlencoded({ extended: true }));
     this.express.use(bodyParser.json());
 
-    this.express.use((req: Request, res: Response, next: NextFunction) => {
-      const appReq: AppRequest = req as any as AppRequest;
+    this.express.use((req: Request, res: Response, next: NextFunction): void => {
+      const appReq: AppRequest = req as AppRequest;
       appReq.getAppContext = () => {
         return appReq.app.locals.appContext;
       };
 
-      const appRes: AppResponse = res as any as AppResponse;
+      const appRes: AppResponse = res as AppResponse;
       appRes.getUserContext = () => {
         return appRes.locals.userContext;
       };
-      next();
+      return next();
     });
   }
 
