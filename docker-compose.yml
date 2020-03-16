@@ -3,6 +3,8 @@ services:
   3at-postgres:
     container_name: 3at-postgres
     build: ./docker/postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
   3at-api:
