@@ -11,7 +11,7 @@ export interface Email {
   to: string;
   from: string;
   templateId: string;
-  dynamic_template_data: Object;
+  dynamic_template_data: any;
 }
 
 /**

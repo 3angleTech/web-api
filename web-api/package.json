@@ -4,12 +4,16 @@
   "description": "Open Source NodeJS Project w/ TypeScript",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf ./dist && tsc",
-    "lint": "tslint --project tsconfig.json",
+    "build": "rimraf ./dist && tsc --project ./src/tsconfig.app.json",
+    "build-spec": "rimraf ./dist && tsc --project ./src/tsconfig.spec.json",
+    "lint": "tslint --project ./src/tsconfig.app.json --project ./src/tsconfig.spec.json",
+    "mocha": "NODE_ENV=test mocha dist/**/*.spec.js --exit",
     "prepare-db": "sequelize db:migrate && sequelize db:seed:all",
     "prepare-db-and-start": "npm run prepare-db && npm run start",
+    "prepare-spec": "npm run build-spec && NODE_ENV=test npm run prepare-db",
     "start": "node dist/index.js",
-    "test": "npm run build && NODE_ENV=test npm run prepare-db && NODE_ENV=test nyc mocha dist/**/*.spec.js dist/common/**/*.spec.js dist/modules/**/*.spec.js --exit"
+    "test": "npm run prepare-spec && npm run mocha",
+    "test-coverage": "npm run prepare-spec && nyc npm run mocha"
   },
   "repository": {
     "type": "git",
@@ -50,6 +54,7 @@
     "@types/body-parser": "1.19.0",
     "@types/chai": "4.2.11",
     "@types/config": "0.0.36",
+    "@types/cookie-parser": "1.4.2",
     "@types/express": "4.17.3",
     "@types/jsonwebtoken": "8.3.8",
     "@types/mocha": "7.0.2",

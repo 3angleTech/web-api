@@ -44,7 +44,8 @@ export class SandboxController implements ISandboxController {
   public async sendActivationMail(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     let user: User = null;
     try {
-      user = await this.accountService.find(req.params.userId);
+      const userId: number = Number(req.params.userId);
+      user = await this.accountService.find(userId);
       if (isNil(user)) {
         return next(new InvalidRequestError({
           httpStatusCode: 400,
