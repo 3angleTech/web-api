@@ -15,7 +15,7 @@ import { IHealthCheckController } from './modules/health-check';
 import { authenticatedUserMiddleware, IAuthController, ISandboxController, validAccessTokenMiddleware } from './modules/security';
 import { createExpressApplication, createExpressRouter } from './other/express.factory';
 
-class App {
+export class App {
   public readonly express: Express;
 
   private authController: IAuthController;
@@ -118,4 +118,6 @@ class App {
   }
 }
 
-export default new App().express;
+export function appFactory(): Express {
+  return new App().express;
+}
