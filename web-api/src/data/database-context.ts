@@ -8,7 +8,7 @@ import { isNil } from '../common/utils';
 const models = require('./sql-db/models');
 
 import { injectable } from 'inversify';
-import { Model, Sequelize, ValidationError } from 'sequelize';
+import { ModelCtor, Sequelize, ValidationError } from 'sequelize';
 import { Logger, LogLevel } from '../common/logger';
 import { DatabaseModel, IDatabaseContext } from './database-context.interface';
 
@@ -29,7 +29,7 @@ export class DatabaseContext implements IDatabaseContext {
     });
   }
 
-  public getModel(model: DatabaseModel): Model<DatabaseModel, any> {
+  public getModel(model: DatabaseModel): ModelCtor<any> {
     return models[model];
   }
 

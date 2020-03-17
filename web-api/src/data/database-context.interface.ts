@@ -4,7 +4,7 @@
  * Available under MIT license webApi/LICENSE
  */
 
-import { Model as SequelizeModel } from 'sequelize';
+import { ModelCtor } from 'sequelize';
 
 /**
  * Available Database Models (tables).
@@ -21,7 +21,7 @@ export interface IDatabaseContext {
    * Provides the sequelize model for a specific table.
    * @param model The name of the table for the desired sequelize model.
    */
-  getModel(model: DatabaseModel): SequelizeModel<any, any>;
+  getModel(model: DatabaseModel): ModelCtor<any>;
 
   /**
    * Check the DB connection status.

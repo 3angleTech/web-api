@@ -4,59 +4,59 @@
  * Available under MIT license webApi/LICENSE
  */
 
-import { DataTypes, QueryInterface } from 'sequelize';
+import { BOOLEAN, DATE, INTEGER, QueryInterface, STRING } from 'sequelize';
 
 module.exports = {
   // tslint:disable-next-line:max-func-body-length
-  up: (queryInterface: QueryInterface, Sequelize: DataTypes) => {
+  up: async (queryInterface: QueryInterface): Promise<void> => {
     return queryInterface.createTable('users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: INTEGER,
       },
       username: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: STRING,
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: STRING,
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: STRING,
       },
       first_name: {
-        type: Sequelize.STRING,
+        type: STRING,
       },
       last_name: {
-        type: Sequelize.STRING,
+        type: STRING,
       },
       active: {
-        type: Sequelize.BOOLEAN,
+        type: BOOLEAN,
         defaultValue: false,
       },
       created_by: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: INTEGER,
       },
       updated_by: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: INTEGER,
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DATE,
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DATE,
       },
     });
   },
-  down: (queryInterface: QueryInterface, Sequelize: DataTypes) => {
+  down: async (queryInterface: QueryInterface): Promise<void> => {
     return queryInterface.dropTable('users');
   },
 };

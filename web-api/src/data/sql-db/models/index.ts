@@ -4,14 +4,13 @@
  * Available under MIT license webApi/LICENSE
  */
 
-/**
- * This file has been generated automatically by sequelize, so it should not be changed.
- */
 const fs = require('fs');
 const path = require('path');
+const Sequelize = require('sequelize');
+
 const basename = path.basename(__filename);
-import * as Sequelize from 'sequelize';
-const dbConfig = require(__dirname + '/../config.js');
+const dbConfig = require('../config');
+
 // TODO: Refactor this file to avoid creating connections on import.
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
 const db: any = {};
