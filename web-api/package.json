@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf ./dist && tsc --project ./src/tsconfig.app.json",
     "build-spec": "rimraf ./dist && tsc --project ./src/tsconfig.spec.json",
-    "lint": "tslint --project ./src/tsconfig.app.json --project ./src/tsconfig.spec.json",
+    "lint": "tslint --format stylish --project ./src/tsconfig.app.json --project ./src/tsconfig.spec.json",
     "mocha": "NODE_ENV=test mocha dist/**/*.spec.js --exit",
     "prepare-db": "sequelize db:migrate && sequelize db:seed:all",
     "prepare-db-and-start": "npm run prepare-db && npm run start",
