@@ -11,8 +11,8 @@ import { IJsonConverterService } from './json-converter.service.interface';
 @injectable()
 export class JsonConverterService implements IJsonConverterService {
 
-  public deserialize<T>(json: any, classReference: new () => T): T {
-    return this.jsonConvert.deserialize(json, classReference);
+  public deserialize<T>(json: any, classReference: new() => T): T {
+    return this.jsonConvert.deserialize(json, classReference) as T;
   }
 
   private get jsonConvert(): JsonConvert {

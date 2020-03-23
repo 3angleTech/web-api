@@ -4,12 +4,12 @@
  * Available under MIT license webApi/LICENSE
  */
 
-import { DataTypes, QueryInterface } from 'sequelize';
+import { QueryInterface } from 'sequelize';
 import { encrypt } from '../../../common/crypto';
 import { ANONYMOUS_USER_ID } from '../../../modules/security';
 
 module.exports = {
-  up: async (queryInterface: QueryInterface, Sequelize: DataTypes) => {
+  up: async (queryInterface: QueryInterface): Promise<void> => {
     await queryInterface.bulkInsert('users', [
       {
         username: 'ionut',
@@ -25,7 +25,7 @@ module.exports = {
     ], {});
   },
 
-  down: async (queryInterface: QueryInterface, Sequelize: DataTypes) => {
+  down: async (queryInterface: QueryInterface): Promise<void> => {
     await queryInterface.bulkDelete('users', null, {});
   },
 };

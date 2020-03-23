@@ -3,7 +3,7 @@
  * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
-import * as bodyParser from 'body-parser';
+import { json, urlencoded } from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import { Express, NextFunction, Request, Response, Router } from 'express';
 
@@ -15,7 +15,7 @@ import { IHealthCheckController } from './modules/health-check';
 import { authenticatedUserMiddleware, IAuthController, ISandboxController, validAccessTokenMiddleware } from './modules/security';
 import { createExpressApplication, createExpressRouter } from './other/express.factory';
 
-class App {
+export class App {
   public readonly express: Express;
 
   private authController: IAuthController;
@@ -67,8 +67,8 @@ class App {
 
   private registerMiddlewares(): void {
     this.express.use(cookieParser());
-    this.express.use(bodyParser.urlencoded({ extended: true }));
-    this.express.use(bodyParser.json());
+    this.express.use(urlencoded({ extended: true }));
+    this.express.use(json());
 
     this.express.use((req: Request, res: Response, next: NextFunction): void => {
       const appReq: AppRequest = req as AppRequest;
@@ -118,4 +118,6 @@ class App {
   }
 }
 
-export default new App().express;
+export function appFactory(): Express {
+  return new App().express;
+}

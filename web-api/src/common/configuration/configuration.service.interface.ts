@@ -4,6 +4,8 @@
  * Available under MIT license webApi/LICENSE
  */
 
+import { Algorithm } from 'jsonwebtoken';
+
 /**
  * Provides OAuth client credentials and token expiration times.
  */
@@ -21,7 +23,7 @@ export interface OAuthClient {
  */
 export interface OAuthConfiguration {
   issuer: string;
-  algorithm: string;
+  algorithm: Algorithm;
   accessTokenSecret: string;
   refreshTokenSecret: string;
   clients: OAuthClient[];

@@ -1,4 +1,5 @@
-FROM node:8
+# Use Node v12 (erbium) LTS as base image.
+FROM node:erbium
 
 # Create app directory
 WORKDIR /usr/src/app

@@ -4,26 +4,31 @@
  * Available under MIT license webApi/LICENSE
  */
 
-import { DataTypes as SequelizeDataTypes, Sequelize } from 'sequelize';
+import {
+  BOOLEAN,
+  DATE,
+  INTEGER,
+  ModelType,
+  Sequelize,
+  STRING,
+} from 'sequelize';
 
-module.exports = (sequelize: Sequelize, DataTypes: SequelizeDataTypes) => {
-  const users = sequelize.define('Users', {
-    username: { type: DataTypes.STRING, field: 'username' },
-    password: { type: DataTypes.STRING, field: 'password' },
-    email: { type: DataTypes.STRING, field: 'email' },
-    firstName: { type: DataTypes.STRING, field: 'first_name' },
-    lastName: { type: DataTypes.STRING, field: 'last_name' },
-    active: { type: DataTypes.BOOLEAN, field: 'active' },
-    createdBy: { type: DataTypes.INTEGER, field: 'created_by' },
-    updatedBy: { type: DataTypes.INTEGER, field: 'updated_by' },
-    createdAt: { type: DataTypes.DATE, field: 'created_at' },
-    updatedAt: { type: DataTypes.DATE, field: 'updated_at' },
+module.exports = (sequelize: Sequelize): ModelType => {
+  // tslint:disable-next-line:no-unnecessary-local-variable prefer-immediate-return
+  const users: ModelType = sequelize.define('Users', {
+    username: { type: STRING, field: 'username' },
+    password: { type: STRING, field: 'password' },
+    email: { type: STRING, field: 'email' },
+    firstName: { type: STRING, field: 'first_name' },
+    lastName: { type: STRING, field: 'last_name' },
+    active: { type: BOOLEAN, field: 'active' },
+    createdBy: { type: INTEGER, field: 'created_by' },
+    updatedBy: { type: INTEGER, field: 'updated_by' },
+    createdAt: { type: DATE, field: 'created_at' },
+    updatedAt: { type: DATE, field: 'updated_at' },
   }, {
-      tableName: 'users',
-      underscored: true,
-    });
-  users.associate = (models) => {
-    // associations can be defined here
-  };
+    tableName: 'users',
+    underscored: true,
+  });
   return users;
 };

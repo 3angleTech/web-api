@@ -4,20 +4,20 @@
  * Available under MIT license webApi/LICENSE
  */
 
+// tslint:disable:no-duplicate-imports
 import * as chai from 'chai';
+import { assert, expect } from 'chai';
 import chaiHttp = require('chai-http');
-chai.use(chaiHttp);
-const expect = chai.expect;
-const assert = chai.assert;
-
 import * as HttpStatus from 'http-status-codes';
-import app from '../app';
+import { appFactory } from '../app';
+
+chai.use(chaiHttp);
+const agent: ChaiHttp.Agent = chai.request.agent(appFactory());
 
 const username = 'ionut';
 const password = 'qW12!@';
 const clientId = '3at-api';
 const clientSecret = '5r5rd15c650f4849119eb894939d9fdaaf5f7d0e7e0f65de15b71bfa6411011y';
-const agent = chai.request.agent(app);
 
 describe('Authentication tests', () => {
 // tslint:disable-next-line: no-commented-code
