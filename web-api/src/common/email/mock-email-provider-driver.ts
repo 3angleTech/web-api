@@ -5,15 +5,20 @@
  */
 
 import { injectable } from 'inversify';
-import { Email, IEmailProviderDriver } from '.';
+
+import { IEmailProviderDriver } from './email-provider-driver.interface';
+import { Email } from './email.service.interface';
 
 @injectable()
 export class MockEmailProviderDriver implements IEmailProviderDriver {
 
-    constructor() { }
+  constructor() {
+  }
 
-    public sendEmail(email: Email): Promise<void> {
-        console.log(email);
-        return;
-    }
+  public async sendEmail(email: Email): Promise<void> {
+    // tslint:disable-next-line:no-console
+    console.log(email);
+
+    return;
+  }
 }

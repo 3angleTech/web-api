@@ -28,4 +28,6 @@ export async function errorMiddleware(
     name: err.name,
     message: err.message,
   });
+
+  return;
 }

@@ -7,6 +7,7 @@
 import { isNil } from '../utils';
 import { ILogger, LogLevel } from './logger.interface';
 
+/* tslint:disable:no-console */
 export class Logger implements ILogger {
   private static instance: Logger;
 
@@ -23,7 +24,6 @@ export class Logger implements ILogger {
   public log(level: LogLevel, message: string, ...optionalParams: any[]): void {
     switch (level) {
       case LogLevel.Debug: {
-        // tslint:disable-next-line:no-console
         console.debug(message, optionalParams);
         break;
       }

@@ -9,7 +9,7 @@ import { Express, NextFunction, Request, Response, Router } from 'express';
 
 import { appContainer } from './app.inversify.config';
 import { errorMiddleware } from './common/error';
-import { AppContext, AppRequest, AppResponse } from './core';
+import { AppContext, AppRequest, AppResponse, UserContext } from './core';
 import { IDatabaseContext } from './data';
 import { IHealthCheckController } from './modules/health-check';
 import { authenticatedUserMiddleware, IAuthController, ISandboxController, validAccessTokenMiddleware } from './modules/security';
@@ -42,6 +42,7 @@ export class App {
       res.header('Access-Control-Allow-Credentials', 'true');
       res.header('Access-Control-Allow-Methods', 'POST,PUT,GET,DELETE');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
       return next();
     });
   }
@@ -72,14 +73,15 @@ export class App {
 
     this.express.use((req: Request, res: Response, next: NextFunction): void => {
       const appReq: AppRequest = req as AppRequest;
-      appReq.getAppContext = () => {
+      appReq.getAppContext = (): AppContext => {
         return appReq.app.locals.appContext;
       };
 
       const appRes: AppResponse = res as AppResponse;
-      appRes.getUserContext = () => {
+      appRes.getUserContext = (): UserContext => {
         return appRes.locals.userContext;
       };
+
       return next();
     });
   }

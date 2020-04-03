@@ -1,5 +1,8 @@
 {
-  "extends": "@3angletech/tslint/ts",
+  "$schema": "http://json.schemastore.org/tslint",
+  "extends": [
+    "@3angletech/tslint/ts"
+  ],
   "rules": {
     "file-header": [
       true,
@@ -11,6 +14,7 @@
       {
         "lodash": ["isNil"]
       }
-    ]
+    ],
+    "no-unnecessary-field-initialization": false
   }
 }

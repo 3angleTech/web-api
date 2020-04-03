@@ -7,7 +7,8 @@
 import { appFactory } from './app';
 import { Logger, LogLevel } from './common/logger';
 
-const port = process.env.PORT || 3000;
+const defaultPortNumber: number = 3000;
+const port: number = Number(process.env.PORT) || defaultPortNumber;
 
 appFactory().listen(port).on('listening', (): void => {
   Logger.getInstance().log(LogLevel.Info, `Server is listening on port ${port}`);

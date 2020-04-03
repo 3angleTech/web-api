@@ -4,8 +4,10 @@
  * Available under MIT license webApi/LICENSE
  */
 
-import { Container } from 'inversify';
+// tslint:disable-next-line:no-import-side-effect
 import 'reflect-metadata';
+
+import { Container } from 'inversify';
 
 import { bindDependencies as bindConfigurationDependencies } from './common/configuration';
 import { bindDependencies as bindJsonConvertedDependencies } from './common/json-converter';

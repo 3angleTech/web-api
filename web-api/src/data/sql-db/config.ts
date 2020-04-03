@@ -4,6 +4,7 @@
  * Available under MIT license webApi/LICENSE
  */
 
+// tslint:disable-next-line:no-import-side-effect
 import 'reflect-metadata';
 
 import * as config from 'config';
@@ -32,5 +33,6 @@ module.exports = {
   migrationStorageTableName: 'sequelize_meta',
   seederStorage: 'sequelize',
   seederStorageTableName: 'data_meta',
+  // tslint:disable-next-line:no-console
   logging: console.log,
 };
