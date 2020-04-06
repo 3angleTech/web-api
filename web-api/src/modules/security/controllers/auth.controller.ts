@@ -21,7 +21,13 @@ import {
 } from '../services/account.service.interface';
 import { IJwtTokenService } from '../services/jwt-token.service.interface';
 import { IOAuthServer } from '../services/oauth-server.interface';
-import { accessTokenCookieName, IAuthController, refreshTokenCookieName, refreshTokenGrantName } from './auth.controller.interface';
+import {
+  accessTokenCookieName,
+  authenticatedCookieName,
+  IAuthController,
+  refreshTokenCookieName,
+  refreshTokenGrantName,
+} from './auth.controller.interface';
 
 @injectable()
 export class AuthController implements IAuthController {
@@ -60,7 +66,7 @@ export class AuthController implements IAuthController {
   // tslint:disable-next-line:max-func-body-length
   public async token(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
     const isRefreshTokenRequest = req.body.grant_type === refreshTokenGrantName;
-    // automatically set the accessToken and refreshToken for clients using Http Only cookies
+    // Automatically set the accessToken and refreshToken for clients using HttpOnly cookies.
     if (isRefreshTokenRequest) {
       const accessToken = req.cookies[accessTokenCookieName];
       const refreshToken = req.cookies[refreshTokenCookieName];
@@ -91,6 +97,9 @@ export class AuthController implements IAuthController {
       });
       res.cookie(refreshTokenCookieName, token.refreshToken, {
         httpOnly: true,
+      });
+      res.cookie(authenticatedCookieName, true, {
+        httpOnly: false,
       });
 
       const message = isRefreshTokenRequest ? 'Token has been refreshed.' : `You are now logged in as ${token.user.username}.`;
@@ -198,6 +207,7 @@ export class AuthController implements IAuthController {
   public logout(req: AppRequest, res: AppResponse, next: NextFunction): void {
     res.clearCookie(accessTokenCookieName);
     res.clearCookie(refreshTokenCookieName);
+    res.clearCookie(authenticatedCookieName);
     res.json({
       message: 'Logged out successfully',
     });
