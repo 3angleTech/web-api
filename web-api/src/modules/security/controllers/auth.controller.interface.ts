@@ -11,6 +11,7 @@ export const refreshTokenGrantName: string = 'refresh_token';
 
 export const accessTokenCookieName: string = 'accessToken';
 export const refreshTokenCookieName: string = 'refreshToken';
+export const authenticatedCookieName: string = 'authenticated';
 
 /**
  * Provides authentication controller endpoints for the application.
