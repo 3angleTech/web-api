@@ -9,7 +9,7 @@ import { AppError, IAppErrorParameters } from './app-error';
 
 export class InvalidRequestError extends AppError {
   constructor(options: IAppErrorParameters) {
-    options.httpStatusCode = HttpStatus.BAD_REQUEST;
+    options.httpStatusCode = options.httpStatusCode || HttpStatus.BAD_REQUEST;
     super(options);
   }
 }

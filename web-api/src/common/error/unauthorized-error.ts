@@ -10,7 +10,7 @@ import { AppError, IAppErrorParameters } from './app-error';
 
 export class UnauthorizedError extends AppError {
   constructor(options: IAppErrorParameters) {
-    options.httpStatusCode = HttpStatus.UNAUTHORIZED;
+    options.httpStatusCode = options.httpStatusCode || HttpStatus.UNAUTHORIZED;
     super(options);
   }
 }
