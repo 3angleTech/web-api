@@ -5,10 +5,9 @@
  */
 import * as HttpStatus from 'http-status-codes';
 
-import { isNil } from '../utils';
-
 import { AppError } from './app-error';
 
+// tslint:disable-next-line:cyclomatic-complexity
 function getStatusFromError(err: unknown): number {
   if (err.hasOwnProperty('message')) {
     if (err['message'] instanceof AppError) {
