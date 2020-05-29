@@ -3,7 +3,7 @@
  * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
-
+/* tslint:disable:max-file-line-count */
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
