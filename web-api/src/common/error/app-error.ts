@@ -4,17 +4,17 @@
  * Available under MIT license webApi/LICENSE
  */
 
-export interface ErrorParameters {
+export interface IAppErrorParameters {
   message: string;
   httpStatusCode: number;
   stack?: string;
   name?: string;
 }
 
-export class AppError extends Error implements ErrorParameters {
+export class AppError extends Error implements IAppErrorParameters {
   public httpStatusCode: number;
 
-  constructor(parameters: ErrorParameters) {
+  constructor(parameters: IAppErrorParameters) {
     super(parameters.message);
     this.httpStatusCode = parameters.httpStatusCode;
     this.stack = parameters.stack;

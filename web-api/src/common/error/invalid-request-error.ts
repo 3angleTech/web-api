@@ -5,10 +5,10 @@
  */
 
 import * as HttpStatus from 'http-status-codes';
-import { AppError, ErrorParameters } from './app-error';
+import { AppError, IAppErrorParameters } from './app-error';
 
 export class InvalidRequestError extends AppError {
-  constructor(options: ErrorParameters) {
+  constructor(options: IAppErrorParameters) {
     options.httpStatusCode = HttpStatus.BAD_REQUEST;
     super(options);
   }
