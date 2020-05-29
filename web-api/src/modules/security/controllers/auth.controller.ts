@@ -84,7 +84,14 @@ export class AuthController implements IAuthController {
     if (!req.body.username && req.body.email) {
       try {
         const loadedUser: User = await this.accountService.findByField('email', req.body.email);
-        req.body.username = loadedUser.username;
+        if (loadedUser) {
+          req.body.username = loadedUser.username;
+        } else {
+          return next(new InvalidRequestError({
+            message: 'Invalid credentials.',
+            name: 'INVALID_CREDENTIALS',
+          }));
+        }
       } catch (err) {
         return next(err);
       }
