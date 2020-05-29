@@ -48,8 +48,9 @@ export class SandboxController implements ISandboxController {
       user = await this.accountService.find(userId);
       if (isNil(user)) {
         return next(new InvalidRequestError({
-          httpStatusCode: 400,
+          httpStatusCode: 404,
           message: 'User not found',
+          name: 'NOT_FOUND',
         }));
       }
 

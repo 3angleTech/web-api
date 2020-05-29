@@ -40,6 +40,10 @@ export async function authenticatedUserMiddleware(req: AppRequest, res: AppRespo
     res.locals.userContext = userContext;
     return next();
   } catch (err) {
-    return next(new UnauthorizedError(err));
+    return next(new UnauthorizedError({
+      name: 'UNAUTHORIZED_REQUEST',
+      message: 'Unauthorized request.',
+      originalError: err,
+    }));
   }
 }
