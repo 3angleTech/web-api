@@ -6,9 +6,11 @@
 
 import { inject, injectable } from 'inversify';
 import { UpdateOptions } from 'sequelize';
+
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
 import { encrypt, verify } from '../../../common/crypto';
 import { ActivateAccountParameters, IEmailService } from '../../../common/email';
+import { InvalidRequestError } from '../../../common/error';
 import { IJsonConverterService } from '../../../common/json-converter';
 import { Logger, LogLevel } from '../../../common/logger';
 import { isNil } from '../../../common/utils';
@@ -38,12 +40,18 @@ export class AccountService implements IAccountService {
       },
     });
     if (isNil(userObject)) {
-      throw new Error('Invalid username or password');
+      throw new InvalidRequestError({
+        message: 'Invalid credentials.',
+        name: 'INVALID_CREDENTIALS',
+      });
     }
     const user: User = this.jsonConverter.deserialize(userObject, User);
     const valid = verify(credentials.password, user.password);
     if (!valid) {
-      throw new Error('Invalid username or password');
+      throw new InvalidRequestError({
+        message: 'Invalid credentials.',
+        name: 'INVALID_CREDENTIALS',
+      });
     }
     return user;
   }
@@ -55,7 +63,11 @@ export class AccountService implements IAccountService {
       },
     });
     if (isNil(userObject)) {
-      throw new Error('Account not found');
+      throw new InvalidRequestError({
+        httpStatusCode: 404,
+        message: 'Account not found.',
+        name: 'NOT_FOUND',
+      });
     }
     return this.jsonConverter.deserialize(userObject, User);
   }

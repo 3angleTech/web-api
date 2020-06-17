@@ -3,12 +3,13 @@
  * Copyright (c) 2019 THREEANGLE SOFTWARE SOLUTIONS SRL
  * Available under MIT license webApi/LICENSE
  */
-
+/* tslint:disable:max-file-line-count */
 import { NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
+
 import { IConfigurationService, OAuthConfiguration } from '../../../common/configuration';
 import { ForgotPasswordParameters, IEmailService } from '../../../common/email';
-import { InvalidRequestError } from '../../../common/error';
+import { InvalidRequestError, UnauthorizedError } from '../../../common/error';
 import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse } from '../../../core';
 import { DatabaseModel, IDatabaseContext, User } from '../../../data';
@@ -21,6 +22,7 @@ import {
 } from '../services/account.service.interface';
 import { IJwtTokenService } from '../services/jwt-token.service.interface';
 import { IOAuthServer } from '../services/oauth-server.interface';
+
 import {
   accessTokenCookieName,
   authenticatedCookieName,
@@ -72,8 +74,8 @@ export class AuthController implements IAuthController {
       const refreshToken = req.cookies[refreshTokenCookieName];
       if (isNil(accessToken) || isNil(refreshToken)) {
         return next(new InvalidRequestError({
-          httpStatusCode: 400,
           message: 'Missing authentication information.',
+          name: 'NO_AUTH_CREDENTIALS',
         }));
       }
       // TODO: Reformat the code to avoid updating these values.
@@ -84,7 +86,14 @@ export class AuthController implements IAuthController {
     if (!req.body.username && req.body.email) {
       try {
         const loadedUser: User = await this.accountService.findByField('email', req.body.email);
-        req.body.username = loadedUser.username;
+        if (loadedUser) {
+          req.body.username = loadedUser.username;
+        } else {
+          return next(new InvalidRequestError({
+            message: 'Invalid credentials.',
+            name: 'INVALID_CREDENTIALS',
+          }));
+        }
       } catch (err) {
         return next(err);
       }
@@ -142,9 +151,10 @@ export class AuthController implements IAuthController {
         password: passwordChange.currentPassword,
       });
       if (isNil(verifiedUser)) {
-        return next(new InvalidRequestError({
+        return next(new UnauthorizedError({
           httpStatusCode: 403,
-          message: 'Invalid password',
+          name: 'INVALID_PASSWORD',
+          message: 'Invalid password.',
         }));
       }
 
@@ -174,8 +184,8 @@ export class AuthController implements IAuthController {
       if (isNil(userObject)) {
         // TODO: Refactor message to avoid disclosing user account existence via forgot password requests.
         return next(new InvalidRequestError({
-          httpStatusCode: 400,
           message: 'Invalid email.',
+          name: 'INVALID_EMAIL',
         }));
       }
 

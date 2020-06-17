@@ -8,14 +8,27 @@ import { NextFunction } from 'express';
 import { UnauthorizedError } from '../../../common/error';
 import { isNil } from '../../../common/utils';
 import { AppRequest, AppResponse, UserContext } from '../../../core';
-import { accessTokenCookieName } from '../controllers/auth.controller.interface';
+import {
+  accessTokenCookieName,
+  authenticatedCookieName,
+  refreshTokenCookieName,
+} from '../controllers/auth.controller.interface';
 
 export async function authenticatedUserMiddleware(req: AppRequest, res: AppResponse, next: NextFunction): Promise<void> {
   // when accessToken is sent via cookie, we initialize the authorization header used by the oauth middleware
   const accessToken = req.cookies[accessTokenCookieName];
-  if (!isNil(accessToken)) {
-    req.headers.authorization = `Bearer ${accessToken}`;
+  if (isNil(accessToken)) {
+    res.clearCookie(accessTokenCookieName);
+    res.clearCookie(refreshTokenCookieName);
+    res.clearCookie(authenticatedCookieName);
+
+    return next(new UnauthorizedError({
+      name: 'UNAUTHORIZED_REQUEST',
+      message: 'Unauthorized request.',
+    }));
   }
+  req.headers.authorization = `Bearer ${accessToken}`;
+
   try {
     const oauthServer = req.getAppContext().getOAuthServer();
     const token = await oauthServer.authenticate(req, res);
@@ -27,6 +40,10 @@ export async function authenticatedUserMiddleware(req: AppRequest, res: AppRespo
     res.locals.userContext = userContext;
     return next();
   } catch (err) {
-    return next(new UnauthorizedError(err));
+    return next(new UnauthorizedError({
+      name: 'UNAUTHORIZED_REQUEST',
+      message: 'Unauthorized request.',
+      originalError: err,
+    }));
   }
 }
