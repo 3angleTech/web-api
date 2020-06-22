@@ -7,8 +7,19 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
+    networks:
+      - external-network
+
   3at-api:
     container_name: 3at-api
     build: ./web-api
     ports:
       - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - external-network
+
+networks:
+  external-network:
+    external:
+      name: 3at-external-network

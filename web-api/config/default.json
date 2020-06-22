@@ -4,7 +4,7 @@
     "username": "threeangle",
     "password": null,
     "database": "threeangle",
-    "host": "127.0.0.1",
+    "host": "3at-postgres",
     "port": 5432,
     "dialect": "postgres"
   },

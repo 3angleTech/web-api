@@ -12,6 +12,11 @@ The recommended IDE is [Visual Studio Code](https://code.visualstudio.com/).
 
 ## Running the application
 
+Create the docker network
+```
+$ docker network create -d bridge 3at-external-network
+```
+
 ### Running the application via NPM
 
 The application requires a PostgreSql instance which is available via docker when running
